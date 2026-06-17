@@ -1,10 +1,14 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
+import type { DemoScenario } from "../lib/demoScenarios";
 import type { ChatMessage } from "../types";
 
 interface Props {
   messages: ChatMessage[];
   loading: boolean;
+  demoScenarios: DemoScenario[];
+  ordersLoading?: boolean;
   onSend: (text: string) => void;
+  onNewSession: () => void;
 }
 
 const decisionBadge: Record<string, string> = {
@@ -13,12 +17,22 @@ const decisionBadge: Record<string, string> = {
   escalated: "badge-escalated",
 };
 
-export default function ChatPanel({ messages, loading, onSend }: Props) {
+export default function ChatPanel({
+  messages,
+  loading,
+  demoScenarios,
+  ordersLoading = false,
+  onSend,
+  onNewSession,
+}: Props) {
   const [input, setInput] = useState("");
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = messagesRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
   }, [messages, loading]);
 
   const handleSubmit = (e: FormEvent) => {
@@ -30,20 +44,45 @@ export default function ChatPanel({ messages, loading, onSend }: Props) {
 
   return (
     <section className="panel chat-panel">
-      <div className="panel-header">
+      <div className="panel-header chat-panel-header">
         <h2>Customer Chat</h2>
+        <button type="button" className="btn-secondary btn-sm" onClick={onNewSession}>
+          New Session
+        </button>
       </div>
 
-      <div className="chat-messages">
+      {demoScenarios.length > 0 && (
+        <div className="chat-demo-prompts">
+          <span className="quick-label">Demo scenarios:</span>
+          {demoScenarios.map((scenario) => (
+            <button
+              key={scenario.label}
+              className="quick-btn"
+              title={scenario.message}
+              onClick={() => onSend(scenario.message)}
+              disabled={loading || ordersLoading}
+            >
+              {scenario.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="chat-messages" ref={messagesRef}>
         {messages.length === 0 && (
           <div className="chat-empty">
-            <p>Start a refund request. Try order <strong>O101</strong> (valid), <strong>O102</strong> (final sale), or <strong>O103</strong> (high value).</p>
+            <p>
+              {ordersLoading
+                ? "Loading your orders…"
+                : "Start a refund request using an order from My Orders, or try a demo scenario above."}
+            </p>
           </div>
         )}
         {messages.map((msg, i) => (
           <div key={i} className={`message ${msg.role}`}>
             <div className="message-label">{msg.role === "user" ? "Customer" : "Agent"}</div>
-            <div className="message-bubble">
+            <div className={`message-bubble ${msg.warning ? "message-warning" : ""}`}>
+              {msg.warning && <span className="warning-badge">Warning</span>}
               {msg.content}
               {msg.decision && (
                 <span className={`badge ${decisionBadge[msg.decision]}`}>{msg.decision.toUpperCase()}</span>
@@ -57,7 +96,6 @@ export default function ChatPanel({ messages, loading, onSend }: Props) {
             <div className="message-bubble loading-dots">Processing</div>
           </div>
         )}
-        <div ref={bottomRef} />
       </div>
 
       <form className="chat-input" onSubmit={handleSubmit}>

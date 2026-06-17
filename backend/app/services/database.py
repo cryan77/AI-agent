@@ -1,11 +1,14 @@
 """SQLite CRM database — seeded from synthetic JSON data on first run."""
 
+import hashlib
 import json
 import sqlite3
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parents[3] / "data"
 DB_PATH = DATA_DIR / "crm.db"
+DEFAULT_PASSWORD = "123456"
+ADMIN_EMAIL = "admin@email.com"
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS customers (
@@ -25,7 +28,20 @@ CREATE TABLE IF NOT EXISTS orders (
     final_sale INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    email TEXT PRIMARY KEY,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL,
+    customer_id TEXT,
+    name TEXT NOT NULL,
+    vip INTEGER NOT NULL DEFAULT 0
+);
 """
+
+
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 def get_connection() -> sqlite3.Connection:
@@ -43,6 +59,9 @@ def init_database() -> None:
         count = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
         if count == 0:
             _seed_from_json(conn)
+        user_count = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        if user_count == 0:
+            _seed_users(conn)
         conn.commit()
     finally:
         conn.close()
@@ -75,3 +94,19 @@ def _seed_from_json(conn: sqlite3.Connection) -> None:
                     int(row["final_sale"]),
                 ),
             )
+
+
+def _seed_users(conn: sqlite3.Connection) -> None:
+    password_hash = hash_password(DEFAULT_PASSWORD)
+    rows = conn.execute("SELECT customer_id, name, email, vip FROM customers").fetchall()
+    for row in rows:
+        conn.execute(
+            """INSERT INTO users (email, password_hash, role, customer_id, name, vip)
+               VALUES (?, ?, 'customer', ?, ?, ?)""",
+            (row["email"].lower(), password_hash, row["customer_id"], row["name"], int(row["vip"])),
+        )
+    conn.execute(
+        """INSERT INTO users (email, password_hash, role, customer_id, name, vip)
+           VALUES (?, ?, 'admin', NULL, 'Admin', 0)""",
+        (ADMIN_EMAIL.lower(), password_hash),
+    )

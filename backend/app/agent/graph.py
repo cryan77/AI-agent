@@ -11,7 +11,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
 from app.agent.prompts import SYSTEM_PROMPT
-from app.agent.tools import ALL_TOOLS, get_trace, record_reasoning, reset_trace
+from app.agent.tools import ALL_TOOLS, get_trace, record_reasoning, reset_trace, set_request_customer_id
 from app.models.schemas import TraceStep
 
 
@@ -35,6 +35,15 @@ def _extract_decision() -> tuple[str | None, str | None]:
             if output.get("blocked"):
                 return output.get("required_decision"), output.get("message")
     return None, None
+
+
+def _extract_warning() -> str | None:
+    trace = get_trace()
+    for entry in trace:
+        output = entry["output"]
+        if isinstance(output, dict) and output.get("error") == "ownership_denied":
+            return output.get("message")
+    return None
 
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -99,8 +108,9 @@ class RefundAgent:
         graph.add_edge("tools", "agent")
         return graph.compile()
 
-    def run(self, message: str, session_id: str | None = None) -> dict:
+    def run(self, message: str, session_id: str | None = None, customer_id: str | None = None) -> dict:
         reset_trace()
+        set_request_customer_id(customer_id)
         session_id = session_id or str(uuid.uuid4())
         start = time.perf_counter()
         retry_count = 0
@@ -153,6 +163,7 @@ class RefundAgent:
             "reply": reply or "I was unable to process your request. Please provide an order ID.",
             "decision": decision,
             "reason": reason,
+            "warning": _extract_warning(),
             "trace": trace_steps,
             "token_usage": final_state.get("token_usage", 0),
             "total_latency_ms": round(total_latency, 2),

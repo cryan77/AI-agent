@@ -27,6 +27,12 @@ CATEGORY_LABELS: dict[TraceCategory, str] = {
 }
 
 _trace_collector: list[dict[str, Any]] = []
+_request_customer_id: str | None = None
+
+
+def set_request_customer_id(customer_id: str | None) -> None:
+    global _request_customer_id
+    _request_customer_id = customer_id.upper() if customer_id else None
 
 
 def reset_trace() -> None:
@@ -36,6 +42,27 @@ def reset_trace() -> None:
 
 def get_trace() -> list[dict[str, Any]]:
     return _trace_collector
+
+
+def _ownership_error(order_id: str) -> dict:
+    return {
+        "error": "ownership_denied",
+        "message": (
+            f"Order {order_id.upper()} does not belong to your account. "
+            "You can only request refunds for your own orders."
+        ),
+    }
+
+
+def _check_order_ownership(order_id: str) -> dict | None:
+    if not _request_customer_id:
+        return None
+    order = data_store.get_order(order_id)
+    if not order:
+        return None
+    if order.customer_id != _request_customer_id:
+        return _ownership_error(order_id)
+    return None
 
 
 def record_reasoning(content: str, planned_tools: list[str] | None = None) -> None:
@@ -87,6 +114,10 @@ def get_customer(customer_id: Annotated[str, "Customer ID, e.g. C001"]) -> dict:
 def get_order(order_id: Annotated[str, "Order ID, e.g. O101"]) -> dict:
     """Look up order details by order ID from the CRM database."""
     start = time.perf_counter()
+    ownership = _check_order_ownership(order_id)
+    if ownership:
+        latency = (time.perf_counter() - start) * 1000
+        return _record("get_order", {"order_id": order_id}, ownership, latency, "error")
     order = data_store.get_order(order_id)
     latency = (time.perf_counter() - start) * 1000
     if not order:
@@ -108,6 +139,10 @@ def get_refund_policy() -> str:
 def evaluate_order_for_refund(order_id: Annotated[str, "Order ID to evaluate against policy"]) -> dict:
     """Programmatically evaluate an order against refund policy rules. Always call before making a decision."""
     start = time.perf_counter()
+    ownership = _check_order_ownership(order_id)
+    if ownership:
+        latency = (time.perf_counter() - start) * 1000
+        return _record("evaluate_order_for_refund", {"order_id": order_id}, ownership, latency, "error")
     evaluation = data_store.evaluate_refund(order_id)
     latency = (time.perf_counter() - start) * 1000
     return _record("evaluate_order_for_refund", {"order_id": order_id}, evaluation, latency)
@@ -120,6 +155,10 @@ def approve_refund(
 ) -> dict:
     """Approve a refund. Only succeeds if order passes all policy checks."""
     start = time.perf_counter()
+    ownership = _check_order_ownership(order_id)
+    if ownership:
+        latency = (time.perf_counter() - start) * 1000
+        return _record("approve_refund", {"order_id": order_id, "reason": reason}, ownership, latency, "error")
     evaluation = data_store.evaluate_refund(order_id)
     latency = (time.perf_counter() - start) * 1000
 
@@ -149,6 +188,10 @@ def deny_refund(
 ) -> dict:
     """Deny a refund request with a policy-based reason."""
     start = time.perf_counter()
+    ownership = _check_order_ownership(order_id)
+    if ownership:
+        latency = (time.perf_counter() - start) * 1000
+        return _record("deny_refund", {"order_id": order_id, "reason": reason}, ownership, latency, "error")
     result = {
         "success": True,
         "decision": "denied",
@@ -167,6 +210,10 @@ def escalate_to_human(
 ) -> dict:
     """Escalate a refund request to a human agent."""
     start = time.perf_counter()
+    ownership = _check_order_ownership(order_id)
+    if ownership:
+        latency = (time.perf_counter() - start) * 1000
+        return _record("escalate_to_human", {"order_id": order_id, "reason": reason}, ownership, latency, "error")
     result = {
         "success": True,
         "decision": "escalated",
