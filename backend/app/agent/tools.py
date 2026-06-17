@@ -1,13 +1,31 @@
 """Agent tools for refund processing."""
 
 import time
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from langchain_core.tools import tool
 
 from app.services.data_loader import data_store
 
-# Session-scoped trace collector (set per request)
+TraceCategory = Literal["crm_lookup", "policy_check", "decision", "reasoning"]
+
+TOOL_CATEGORIES: dict[str, TraceCategory] = {
+    "get_customer": "crm_lookup",
+    "get_order": "crm_lookup",
+    "get_refund_policy": "policy_check",
+    "evaluate_order_for_refund": "policy_check",
+    "approve_refund": "decision",
+    "deny_refund": "decision",
+    "escalate_to_human": "decision",
+}
+
+CATEGORY_LABELS: dict[TraceCategory, str] = {
+    "crm_lookup": "Database Lookup",
+    "policy_check": "Policy Check",
+    "decision": "Decision",
+    "reasoning": "Agent Reasoning",
+}
+
 _trace_collector: list[dict[str, Any]] = []
 
 
@@ -20,10 +38,30 @@ def get_trace() -> list[dict[str, Any]]:
     return _trace_collector
 
 
-def _record(tool_name: str, tool_input: dict, result: Any, latency_ms: float, status: str = "success") -> Any:
+def record_reasoning(content: str, planned_tools: list[str] | None = None) -> None:
+    _trace_collector.append(
+        {
+            "tool": "agent_reasoning",
+            "category": "reasoning",
+            "input": {"planned_tools": planned_tools or []},
+            "output": content,
+            "latency_ms": 0,
+            "status": "success",
+        }
+    )
+
+
+def _record(
+    tool_name: str,
+    tool_input: dict,
+    result: Any,
+    latency_ms: float,
+    status: str = "success",
+) -> Any:
     _trace_collector.append(
         {
             "tool": tool_name,
+            "category": TOOL_CATEGORIES.get(tool_name, "decision"),
             "input": tool_input,
             "output": result if isinstance(result, (dict, str)) else str(result),
             "latency_ms": round(latency_ms, 2),
@@ -35,7 +73,7 @@ def _record(tool_name: str, tool_input: dict, result: Any, latency_ms: float, st
 
 @tool
 def get_customer(customer_id: Annotated[str, "Customer ID, e.g. C001"]) -> dict:
-    """Look up a customer profile by customer ID."""
+    """Look up a customer profile by customer ID from the CRM database."""
     start = time.perf_counter()
     customer = data_store.get_customer(customer_id)
     latency = (time.perf_counter() - start) * 1000
@@ -47,7 +85,7 @@ def get_customer(customer_id: Annotated[str, "Customer ID, e.g. C001"]) -> dict:
 
 @tool
 def get_order(order_id: Annotated[str, "Order ID, e.g. O101"]) -> dict:
-    """Look up order details by order ID."""
+    """Look up order details by order ID from the CRM database."""
     start = time.perf_counter()
     order = data_store.get_order(order_id)
     latency = (time.perf_counter() - start) * 1000

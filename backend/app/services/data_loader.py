@@ -1,8 +1,8 @@
-import json
 from datetime import date, datetime
 from pathlib import Path
 
 from app.models.schemas import Customer, Order
+from app.services.database import get_connection, init_database
 
 DATA_DIR = Path(__file__).resolve().parents[3] / "data"
 REFUND_WINDOW_DAYS = 30
@@ -12,29 +12,48 @@ CURRENT_DATE = date(2026, 6, 17)
 
 class DataStore:
     def __init__(self) -> None:
-        self._customers: dict[str, Customer] = {}
-        self._orders: dict[str, Order] = {}
-        self._policy: str = ""
-        self._load()
-
-    def _load(self) -> None:
-        with open(DATA_DIR / "customers.json", encoding="utf-8") as f:
-            for row in json.load(f):
-                customer = Customer(**row)
-                self._customers[customer.customer_id] = customer
-
-        with open(DATA_DIR / "orders.json", encoding="utf-8") as f:
-            for row in json.load(f):
-                order = Order(**row)
-                self._orders[order.order_id] = order
-
+        init_database()
         self._policy = (DATA_DIR / "refund_policy.md").read_text(encoding="utf-8")
 
     def get_customer(self, customer_id: str) -> Customer | None:
-        return self._customers.get(customer_id.upper())
+        conn = get_connection()
+        try:
+            row = conn.execute(
+                "SELECT customer_id, name, email, vip FROM customers WHERE customer_id = ?",
+                (customer_id.upper(),),
+            ).fetchone()
+        finally:
+            conn.close()
+        if not row:
+            return None
+        return Customer(
+            customer_id=row["customer_id"],
+            name=row["name"],
+            email=row["email"],
+            vip=bool(row["vip"]),
+        )
 
     def get_order(self, order_id: str) -> Order | None:
-        return self._orders.get(order_id.upper())
+        conn = get_connection()
+        try:
+            row = conn.execute(
+                """SELECT order_id, customer_id, item_name, price, purchase_date, status, final_sale
+                   FROM orders WHERE order_id = ?""",
+                (order_id.upper(),),
+            ).fetchone()
+        finally:
+            conn.close()
+        if not row:
+            return None
+        return Order(
+            order_id=row["order_id"],
+            customer_id=row["customer_id"],
+            item_name=row["item_name"],
+            price=row["price"],
+            purchase_date=row["purchase_date"],
+            status=row["status"],
+            final_sale=bool(row["final_sale"]),
+        )
 
     def get_refund_policy(self) -> str:
         return self._policy

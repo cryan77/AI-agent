@@ -11,7 +11,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
 from app.agent.prompts import SYSTEM_PROMPT
-from app.agent.tools import ALL_TOOLS, get_trace, reset_trace
+from app.agent.tools import ALL_TOOLS, get_trace, record_reasoning, reset_trace
 from app.models.schemas import TraceStep
 
 
@@ -75,6 +75,14 @@ class RefundAgent:
                 token_usage += response.usage_metadata.get("total_tokens", 0)
             else:
                 token_usage += len(str(response.content)) // 4 + 100
+
+            if response.content:
+                planned = [tc["name"] for tc in response.tool_calls] if response.tool_calls else []
+                record_reasoning(
+                    response.content if isinstance(response.content, str) else str(response.content),
+                    planned_tools=planned,
+                )
+
             return {"messages": [response], "token_usage": token_usage}
 
         def should_continue(state: AgentState) -> Literal["tools", "end"]:
@@ -128,7 +136,15 @@ class RefundAgent:
                     break
 
         trace_steps = [
-            TraceStep(step=i + 1, tool=t["tool"], input=t["input"], output=t["output"], latency_ms=t["latency_ms"], status=t["status"])
+            TraceStep(
+                step=i + 1,
+                tool=t["tool"],
+                category=t.get("category", "decision"),
+                input=t["input"],
+                output=t["output"],
+                latency_ms=t["latency_ms"],
+                status=t["status"],
+            )
             for i, t in enumerate(trace_raw)
         ]
 

@@ -10,5 +10,6 @@ dist/
 
 .DS_Store
 *.log
+data/crm.db
 
 /docs/*

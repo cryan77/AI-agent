@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.agent.graph import RefundAgent
+from app.services.database import init_database
 from app.models.schemas import ChatRequest, ChatResponse, HealthResponse
 
 load_dotenv()
@@ -16,6 +17,7 @@ agent: RefundAgent | None = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global agent
+    init_database()
     api_key = os.getenv("OPENROUTER_API_KEY")
     model = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
     base_url = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")

@@ -22,6 +22,7 @@ class Order(BaseModel):
 class TraceStep(BaseModel):
     step: int
     tool: str
+    category: Literal["crm_lookup", "policy_check", "decision", "reasoning"] = "decision"
     input: dict[str, Any]
     output: dict[str, Any] | str
     latency_ms: float
