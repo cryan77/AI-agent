@@ -1,0 +1,17 @@
+[
+  {"customer_id": "C001", "name": "John Smith", "email": "john.smith@email.com", "vip": false},
+  {"customer_id": "C002", "name": "Sarah Johnson", "email": "sarah.j@email.com", "vip": true},
+  {"customer_id": "C003", "name": "Michael Chen", "email": "mchen@email.com", "vip": false},
+  {"customer_id": "C004", "name": "Emily Davis", "email": "emily.davis@email.com", "vip": false},
+  {"customer_id": "C005", "name": "Robert Wilson", "email": "rwilson@email.com", "vip": true},
+  {"customer_id": "C006", "name": "Lisa Anderson", "email": "lisa.a@email.com", "vip": false},
+  {"customer_id": "C007", "name": "David Martinez", "email": "dmartinez@email.com", "vip": false},
+  {"customer_id": "C008", "name": "Jennifer Taylor", "email": "jtaylor@email.com", "vip": true},
+  {"customer_id": "C009", "name": "James Brown", "email": "jbrown@email.com", "vip": false},
+  {"customer_id": "C010", "name": "Amanda Garcia", "email": "agarcia@email.com", "vip": false},
+  {"customer_id": "C011", "name": "Christopher Lee", "email": "clee@email.com", "vip": false},
+  {"customer_id": "C012", "name": "Michelle White", "email": "mwhite@email.com", "vip": true},
+  {"customer_id": "C013", "name": "Daniel Harris", "email": "dharris@email.com", "vip": false},
+  {"customer_id": "C014", "name": "Jessica Clark", "email": "jclark@email.com", "vip": false},
+  {"customer_id": "C015", "name": "Matthew Lewis", "email": "mlewis@email.com", "vip": false}
+]
