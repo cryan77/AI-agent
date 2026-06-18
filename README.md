@@ -62,6 +62,19 @@ npm run dev
 
 Open **http://127.0.0.1:5173**
 
+## Deploy Backend (Railway)
+
+The repo root includes `requirements.txt`, `runtime.txt`, and `nixpacks.toml` so Railway installs Python and runs the API with access to the `data/` folder.
+
+1. Create a Railway project from this GitHub repo.
+2. **Root Directory:** leave empty (repo root).
+3. **Build Command:** leave empty — Nixpacks runs `pip install -r requirements.txt` automatically.
+4. **Start Command:** leave empty — `nixpacks.toml` starts `uvicorn` from `backend/`.
+5. Set variables: `OPENROUTER_API_KEY`, `JWT_SECRET` (see `backend/.env.example`).
+6. Generate a public domain and verify `GET /health`.
+
+If you set a custom build command like `pip install -r backend/requirements.txt`, the build fails with `pip: not found` because Python is not installed until Nixpacks detects the root `requirements.txt`.
+
 ## Demo Scenarios
 
 | Scenario | Message | Expected |
