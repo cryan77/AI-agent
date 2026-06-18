@@ -116,19 +116,21 @@ export default function ChatPanel({
 
       {demoScenarios.length > 0 && (
         <div className="chat-demo-prompts">
-          <span className="quick-label">Try:</span>
-          {demoScenarios.map((scenario) => (
-            <button
-              key={scenario.label}
-              type="button"
-              className="quick-btn"
-              title={scenario.message}
-              onClick={() => onSend(scenario.message)}
-              disabled={loading || ordersLoading}
-            >
-              {scenario.label}
-            </button>
-          ))}
+          <span className="chat-demo-label">Suggested prompts</span>
+          <div className="chat-demo-grid">
+            {demoScenarios.map((scenario) => (
+              <button
+                key={scenario.label}
+                type="button"
+                className="chat-demo-chip"
+                title={scenario.message}
+                onClick={() => onSend(scenario.message)}
+                disabled={loading || ordersLoading}
+              >
+                {scenario.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
