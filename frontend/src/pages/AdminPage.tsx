@@ -1,29 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomerSearchInput from "../components/CustomerSearchInput";
+import { IconPanelExpand, IconSearch } from "../components/icons/SidebarIcons";
+import StatusPill, { type StatusKind } from "../components/StatusPill";
 import TraceDashboard from "../components/TraceDashboard";
 import { authFetch } from "../lib/auth";
-import { DECISION_BADGE, PENDING_BADGE } from "../lib/decisionBadge";
+import { PENDING_BADGE } from "../lib/decisionBadge";
+import { customerInitials } from "../lib/customerInitials";
 import { formatDateTime } from "../lib/formatDate";
 import { filterByQuery } from "../lib/search";
 import type { ChatResponse, SessionSummary } from "../types";
 
 type StatusFilter = "all" | "approved" | "denied" | "escalated" | "pending";
 
-const STATUS_FILTERS: { id: StatusFilter; label: string; badgeClass?: string }[] = [
+const STATUS_FILTERS: { id: StatusFilter; label: string; pillClass?: string }[] = [
   { id: "all", label: "All" },
-  { id: "approved", label: "Approved", badgeClass: DECISION_BADGE.approved },
-  { id: "denied", label: "Denied", badgeClass: DECISION_BADGE.denied },
-  { id: "escalated", label: "Escalated", badgeClass: DECISION_BADGE.escalated },
-  { id: "pending", label: "Pending", badgeClass: PENDING_BADGE },
+  { id: "approved", label: "Approved", pillClass: "badge-approved" },
+  { id: "denied", label: "Denied", pillClass: "badge-denied" },
+  { id: "escalated", label: "Escalated", pillClass: "badge-escalated" },
+  { id: "pending", label: "Pending", pillClass: PENDING_BADGE },
 ];
 
 function sessionStatus(s: SessionSummary): Exclude<StatusFilter, "all"> {
   return s.decision ?? "pending";
-}
-
-function statusLabel(s: SessionSummary) {
-  const status = sessionStatus(s);
-  return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
 export default function AdminPage() {
@@ -39,18 +37,31 @@ export default function AdminPage() {
   const customers = useMemo(() => {
     const map = new Map<
       string,
-      { customer_id: string; customer_name: string; customer_email: string; count: number }
+      {
+        customer_id: string;
+        customer_name: string;
+        customer_email: string;
+        count: number;
+        last_message: string;
+        last_at: string;
+      }
     >();
     for (const s of sessions) {
       const existing = map.get(s.customer_id);
       if (existing) {
         existing.count += 1;
+        if (s.created_at > existing.last_at) {
+          existing.last_message = s.user_message;
+          existing.last_at = s.created_at;
+        }
       } else {
         map.set(s.customer_id, {
           customer_id: s.customer_id,
           customer_name: s.customer_name,
           customer_email: s.customer_email,
           count: 1,
+          last_message: s.user_message,
+          last_at: s.created_at,
         });
       }
     }
@@ -161,36 +172,64 @@ export default function AdminPage() {
 
   return (
     <main className="admin-main admin-main-history">
-      <section className="panel admin-chat-customers anim-panel-in">
-        <div className="panel-header">
-          <h2>Customers</h2>
-          <span className="panel-tag">CRM</span>
+      <section className="panel admin-customers-rail anim-panel-in">
+        <div className="chat-sidebar-top">
+          <div className="chat-sidebar-rail chat-sidebar-top-icons">
+            <span className="rail-icon rail-icon-expand" aria-hidden="true">
+              <IconPanelExpand />
+            </span>
+            <span className="rail-icon rail-icon-search" aria-hidden="true">
+              <IconSearch />
+            </span>
+          </div>
+          <div className="chat-sidebar-main chat-sidebar-inbox">
+            <div className="chat-sidebar-head">
+              <h2>Customers</h2>
+              <span className="chat-inbox-tag">Inbox</span>
+            </div>
+            <label className="chat-search-field">
+              <IconSearch />
+              <input
+                type="search"
+                value={customerSearch}
+                onChange={(e) => setCustomerSearch(e.target.value)}
+                placeholder="Search customers"
+                aria-label="Search customers"
+              />
+            </label>
+          </div>
         </div>
-        <CustomerSearchInput
-          value={customerSearch}
-          onChange={setCustomerSearch}
-          placeholder="Search customers…"
-          aria-label="Search customers"
-        />
-        <div className="customers-list">
+
+        <div className="chat-user-list">
           {customers.length === 0 && (
-            <p className="trace-empty">No customer chats yet.</p>
+            <p className="chat-sidebar-empty">No customer chats yet.</p>
           )}
           {customers.length > 0 && filteredCustomers.length === 0 && (
-            <p className="trace-empty">No customers match your search.</p>
+            <p className="chat-sidebar-empty">No customers match your search.</p>
           )}
           {filteredCustomers.map((c) => (
             <button
               key={c.customer_id}
               type="button"
-              className={`customer-list-item ${selectedCustomerId === c.customer_id ? "selected" : ""}`}
+              title={c.customer_name || c.customer_id}
+              className={`chat-user-item ${selectedCustomerId === c.customer_id ? "selected" : ""}`}
               onClick={() => selectCustomer(c.customer_id)}
             >
-              <span className="customer-list-name">{c.customer_name || c.customer_id}</span>
-              <span className="customer-list-meta">
-                {c.customer_id}
-                · {c.count} message{c.count === 1 ? "" : "s"}
-              </span>
+              <div className="chat-sidebar-rail">
+                <span className="customer-avatar" aria-hidden="true">
+                  {customerInitials(c.customer_name, c.customer_id)}
+                </span>
+              </div>
+              <div className="chat-sidebar-main chat-user-body">
+                <div className="chat-user-top">
+                  <span className="chat-user-name">{c.customer_name || c.customer_id}</span>
+                  <span className="chat-user-count">{c.count}</span>
+                </div>
+                <p className="chat-user-preview">
+                  {c.last_message.slice(0, 48)}
+                  {c.last_message.length > 48 ? "…" : ""}
+                </p>
+              </div>
             </button>
           ))}
         </div>
@@ -209,19 +248,15 @@ export default function AdminPage() {
           aria-label="Search chat history"
         />
         <div className="history-status-filters">
-          {STATUS_FILTERS.map(({ id, label, badgeClass }) => (
+          {STATUS_FILTERS.map(({ id, label, pillClass }) => (
             <button
               key={id}
               type="button"
-              className={`history-status-chip ${statusFilter === id ? "selected" : ""}`}
+              className={`history-status-chip ${pillClass ?? ""} ${statusFilter === id ? "selected" : ""}`}
               onClick={() => setStatusFilter(id)}
               disabled={!selectedCustomerId}
             >
-              {id === "all" ? (
-                <span className="history-status-label">{label}</span>
-              ) : (
-                <span className={`badge ${badgeClass}`}>{label}</span>
-              )}
+              <span className="history-status-label">{label}</span>
               <span className="history-status-count">{statusCounts[id]}</span>
             </button>
           ))}
@@ -237,8 +272,7 @@ export default function AdminPage() {
             <p className="trace-empty">No messages match your filters.</p>
           )}
           {filteredHistory.map((s) => {
-            const status = sessionStatus(s);
-            const badgeClass = DECISION_BADGE[status] ?? PENDING_BADGE;
+            const status = sessionStatus(s) as StatusKind;
             return (
               <button
                 key={s.turn_id}
@@ -247,9 +281,7 @@ export default function AdminPage() {
                 onClick={() => loadTurn(s.turn_id)}
               >
                 <div className="session-item-top">
-                  <span className={`badge session-status-badge ${badgeClass}`}>
-                    {statusLabel(s)}
-                  </span>
+                  <StatusPill status={status} className="session-status-pill" />
                   <span className="session-time">{formatDateTime(s.created_at)}</span>
                 </div>
                 <span className="session-msg">{s.user_message.slice(0, 72)}</span>
