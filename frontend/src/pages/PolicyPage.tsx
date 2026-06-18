@@ -20,7 +20,7 @@ export default function PolicyPage() {
 
   return (
     <main className="page-main">
-      <section className="panel policy-panel">
+      <section className="panel policy-panel anim-panel-in">
         <div className="panel-header">
           <h2>Company Refund Policy</h2>
           <span className="panel-tag">Customer</span>

@@ -59,7 +59,7 @@ export default function AdminPage() {
 
   return (
     <main className="admin-main">
-      <section className="panel session-list-panel">
+      <section className="panel session-list-panel anim-panel-in">
         <div className="panel-header">
           <h2>Chat Sessions</h2>
           <span className="panel-tag">Live</span>
@@ -84,7 +84,7 @@ export default function AdminPage() {
       </section>
 
       {loading ? (
-        <section className="panel trace-panel">
+        <section className="panel trace-panel anim-panel-in">
           <div className="trace-empty">Loading trace…</div>
         </section>
       ) : (

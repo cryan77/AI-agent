@@ -62,10 +62,13 @@ export interface ThinkingStep {
 export interface ChatMessage {
   role: "user" | "agent";
   content: string;
+  sentAt?: string;
   decision?: "approved" | "denied" | "escalated";
   warning?: string;
   thinking?: ThinkingStep[];
   thinkingVisible?: boolean;
+  thinkingFading?: boolean;
+  error?: boolean;
 }
 
 export interface ChatResponse {

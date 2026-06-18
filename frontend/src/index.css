@@ -17,6 +17,8 @@
   --success: #2a8703;
   --error: #de1c24;
   --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --soft-blue: rgba(0, 113, 220, 0.06);
+  --soft-yellow: rgba(255, 194, 32, 0.12);
 }
 
 * {
@@ -35,6 +37,9 @@ body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 113, 220, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(255, 194, 32, 0.06), transparent);
 }
 
 #root {

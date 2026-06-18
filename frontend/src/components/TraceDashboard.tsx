@@ -27,7 +27,7 @@ export default function TraceDashboard({ trace, metrics }: Props) {
   const errorSteps = trace?.trace.filter((s) => s.status === "error") ?? [];
 
   return (
-    <section className="panel trace-panel">
+    <section className="panel trace-panel anim-panel-in">
       <div className="panel-header">
         <h2>Admin Dashboard</h2>
         <span className="panel-tag">Debug Panel</span>

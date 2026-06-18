@@ -85,7 +85,7 @@ export default function AdminCustomerPanel() {
 
   return (
     <>
-      <section className="panel customers-list-panel">
+      <section className="panel customers-list-panel anim-panel-in">
         <div className="panel-header">
           <h2>Customers</h2>
           <span className="panel-tag">CRM</span>
@@ -118,7 +118,7 @@ export default function AdminCustomerPanel() {
         </div>
       </section>
 
-      <section className="panel customers-detail-panel">
+      <section className="panel customers-detail-panel anim-panel-in">
         {!selected ? (
           <div className="customers-detail-empty">
             <p>Select a customer to view orders and actions.</p>

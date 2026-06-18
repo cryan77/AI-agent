@@ -97,19 +97,20 @@ export default function SignInPage() {
             </label>
             <p className="signin-hint">Default password for all CRM users: {DEFAULT_PASSWORD}</p>
             {error && <p className="lookup-error">{error}</p>}
-            <button type="submit" disabled={loading}>
+            <button type="submit" className="btn-interactive" disabled={loading}>
               {loading ? "Signing in…" : "Sign In"}
             </button>
           </form>
 
           <div className="demo-accounts">
             <span className="quick-label">Quick fill:</span>
-            {DEMO_ACCOUNTS.map((a) => (
+            {DEMO_ACCOUNTS.map((a, i) => (
               <button
                 key={a.email}
                 type="button"
-                className="quick-btn"
+                className="quick-btn btn-interactive anim-fade-up"
                 onClick={() => fillDemo(a.email)}
+                style={{ animationDelay: `${i * 0.04}s` }}
               >
                 {a.name}
               </button>

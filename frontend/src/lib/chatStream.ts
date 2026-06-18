@@ -1,4 +1,5 @@
 import type { ChatResponse, ThinkingStep } from "../types";
+import { toChatErrorMessage } from "./chatErrors";
 
 export type ChatStreamEvent =
   | { type: "start"; session_id: string }
@@ -10,7 +11,7 @@ export async function streamChat(
   message: string,
   sessionId: string | undefined,
   onEvent: (event: ChatStreamEvent) => void,
-  fetchFn: typeof fetch
+  fetchFn: (url: string, options?: RequestInit) => Promise<Response>
 ): Promise<void> {
   const res = await fetchFn("/api/chat/stream", {
     method: "POST",
@@ -20,7 +21,8 @@ export async function streamChat(
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: "Request failed" }));
-    throw new Error(err.detail || "Request failed");
+    const detail = typeof err.detail === "string" ? err.detail : "Request failed";
+    throw new Error(toChatErrorMessage(new Error(detail)));
   }
 
   const reader = res.body?.getReader();
@@ -43,7 +45,7 @@ export async function streamChat(
       const payload = JSON.parse(line.slice(6)) as ChatStreamEvent;
       onEvent(payload);
       if (payload.type === "error") {
-        throw new Error(payload.detail);
+        throw new Error(toChatErrorMessage(new Error(payload.detail)));
       }
     }
   }

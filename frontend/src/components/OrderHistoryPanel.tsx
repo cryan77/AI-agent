@@ -16,7 +16,7 @@ export default function OrderHistoryPanel({
   error = null,
 }: Props) {
   return (
-    <section className={`panel ${compact ? "order-panel-compact" : "order-panel"}`}>
+    <section className={`panel anim-panel-in ${compact ? "order-panel-compact" : "order-panel"}`}>
       <div className="panel-header">
         <h2>My Orders</h2>
       </div>

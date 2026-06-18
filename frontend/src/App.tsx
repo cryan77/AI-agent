@@ -7,6 +7,7 @@ import AdminCustomersPage from "./pages/AdminCustomersPage";
 import CustomerPage from "./pages/CustomerPage";
 import PolicyPage from "./pages/PolicyPage";
 import SignInPage from "./pages/SignInPage";
+import "./animations.css";
 import "./App.css";
 
 export default function App() {
