@@ -1,3 +1,5 @@
+import { apiUrl } from "./api";
+
 const TOKEN_KEY = "refund_agent_token";
 const USER_KEY = "refund_agent_user";
 
@@ -28,5 +30,5 @@ export async function authFetch(url: string, options: RequestInit = {}) {
   if (options.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
-  return fetch(url, { ...options, headers });
+  return fetch(apiUrl(url), { ...options, headers });
 }

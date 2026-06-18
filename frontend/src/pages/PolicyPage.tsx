@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { apiUrl } from "../lib/api";
 
 export default function PolicyPage() {
   const [content, setContent] = useState("");
@@ -8,7 +9,7 @@ export default function PolicyPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/policy")
+    fetch(apiUrl("/policy"))
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load policy");
         return res.json();

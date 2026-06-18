@@ -111,7 +111,7 @@ export default function AdminPage() {
 
   const loadSessions = useCallback(async () => {
     try {
-      const res = await authFetch("/api/sessions");
+      const res = await authFetch("/sessions");
       if (!res.ok) return;
       const data = await res.json();
       setSessions(data.sessions);
@@ -123,7 +123,7 @@ export default function AdminPage() {
   const loadTurn = useCallback(async (turnId: string) => {
     setLoading(true);
     try {
-      const res = await authFetch(`/api/sessions/${turnId}`);
+      const res = await authFetch(`/sessions/${turnId}`);
       if (!res.ok) throw new Error("Chat turn not found");
       const data: ChatResponse = await res.json();
       setTrace(data);

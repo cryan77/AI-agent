@@ -43,6 +43,13 @@ load_dotenv()
 
 agent: RefundAgent | None = None
 
+DEFAULT_CORS_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://ai-agent-neon-phi.vercel.app"
+
+
+def _cors_origins() -> list[str]:
+    raw = os.getenv("CORS_ORIGINS", DEFAULT_CORS_ORIGINS)
+    return [o.strip() for o in raw.split(",") if o.strip()]
+
 ORDER_ID_PATTERN = re.compile(r"\b(O\d+)\b", re.IGNORECASE)
 
 
@@ -111,7 +118,7 @@ app = FastAPI(title="AI Refund Agent", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173","https://ai-agent-production-02bf.up.railway.app:8080", "https://ai-agent-neon-phi.vercel.app"],
+    allow_origins=_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

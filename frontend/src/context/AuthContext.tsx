@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { apiUrl } from "../lib/api";
 import { authFetch, clearAuth, getStoredUser, getToken, setAuth } from "../lib/auth";
 import type { UserProfile } from "../types";
 
@@ -23,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const res = await fetch("/api/auth/signin", {
+    const res = await fetch(apiUrl("/auth/signin"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -52,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       return;
     }
-    authFetch("/api/auth/me")
+    authFetch("/auth/me")
       .then((res) => {
         if (!res.ok) throw new Error("Session expired");
         return res.json();

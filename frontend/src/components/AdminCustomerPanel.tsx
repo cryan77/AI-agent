@@ -17,7 +17,7 @@ export default function AdminCustomerPanel() {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    authFetch("/api/admin/customers")
+    authFetch("/admin/customers")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load customers");
         return res.json();
@@ -71,7 +71,7 @@ export default function AdminCustomerPanel() {
     setCheckingRefund(true);
     setActionMessage(null);
     try {
-      const res = await authFetch(`/api/admin/orders/${orderId}/refund-eligibility`);
+      const res = await authFetch(`/admin/orders/${orderId}/refund-eligibility`);
       if (!res.ok) throw new Error("Refund check failed");
       const data: RefundEligibility = await res.json();
       setRefundCheck(data);

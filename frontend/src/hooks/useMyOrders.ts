@@ -13,7 +13,7 @@ export function useMyOrders() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    authFetch("/api/orders/me")
+    authFetch("/orders/me")
       .then((res) => {
         if (res.status === 401) throw new Error("Session expired. Please sign in again.");
         if (!res.ok) throw new Error("Failed to load orders");
