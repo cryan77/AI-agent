@@ -64,7 +64,7 @@ Open **http://127.0.0.1:5173**
 
 ## Deploy Backend (Railway)
 
-The repo root includes `requirements.txt`, `runtime.txt`, `railway.toml`, and `railpack.json` so Railway (Railpack) installs Python and starts the API with access to the `data/` folder.
+The repo root includes `requirements.txt` (Python deps for Railway), `runtime.txt`, `mise.toml`, `railway.toml`, and `railpack.json`. Railpack installs from the root `requirements.txt` only — do not use `-r backend/requirements.txt` there, because the `backend/` folder is not available during the install step.
 
 1. Create a Railway project from this GitHub repo.
 2. **Root Directory:** leave empty (repo root).
