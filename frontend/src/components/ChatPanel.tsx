@@ -1,4 +1,6 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { DECISION_BADGE } from "../lib/decisionBadge";
+import { formatTime } from "../lib/formatDate";
 import type { DemoScenario } from "../lib/demoScenarios";
 import type { ChatMessage, ThinkingStep } from "../types";
 
@@ -10,20 +12,6 @@ interface Props {
   ordersLoading?: boolean;
   onSend: (text: string) => void;
   onNewSession: () => void;
-}
-
-const decisionBadge: Record<string, string> = {
-  approved: "badge-approved",
-  denied: "badge-denied",
-  escalated: "badge-escalated",
-};
-
-function formatTime(iso?: string) {
-  if (!iso) return "";
-  return new Intl.DateTimeFormat(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(iso));
 }
 
 function TypingDots() {
@@ -167,7 +155,7 @@ export default function ChatPanel({
               <p className="chat-msg-text">{msg.content}</p>
               <div className="chat-msg-footer">
                 {msg.decision && (
-                  <span className={`badge ${decisionBadge[msg.decision]}`}>
+                  <span className={`badge ${DECISION_BADGE[msg.decision]}`}>
                     {msg.decision.toUpperCase()}
                   </span>
                 )}

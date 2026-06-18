@@ -199,31 +199,6 @@ async def get_session_detail(turn_id: str, _admin: UserProfile = Depends(require
     )
 
 
-@app.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest, current: UserProfile = Depends(require_customer)):
-    if agent is None:
-        raise HTTPException(status_code=503, detail="Agent not initialized")
-
-    customer_id = current.customer_id  # type: ignore[assignment]
-    warning = _ownership_warning(request.message, customer_id)
-    if warning:
-        session_id = request.session_id or str(uuid.uuid4())
-        result = _blocked_ownership_result(session_id, warning)
-        _save_customer_turn(result, request.message, current)
-        return ChatResponse(**result)
-
-    try:
-        set_request_customer_id(customer_id)
-        reset_trace()
-        result = agent.run(request.message, request.session_id, customer_id=customer_id)
-        _save_customer_turn(result, request.message, current)
-        return ChatResponse(**result)
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=format_llm_error(e)) from e
-    finally:
-        set_request_customer_id(None)
-
-
 @app.post("/chat/stream")
 async def chat_stream(request: ChatRequest, current: UserProfile = Depends(require_customer)):
     if agent is None:

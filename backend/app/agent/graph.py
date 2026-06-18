@@ -207,15 +207,6 @@ class RefundAgent:
             last_trace_len += 1
         return events, last_trace_len
 
-    def run(self, message: str, session_id: str | None = None, customer_id: str | None = None) -> dict:
-        reset_trace()
-        set_request_customer_id(customer_id)
-        session_id = session_id or str(uuid.uuid4())
-        start = time.perf_counter()
-        initial_state = self._initial_state(message, session_id)
-        final_state = self.graph.invoke(initial_state, {"recursion_limit": 15})
-        return _build_result(final_state, session_id, start, get_trace())
-
     def run_stream(
         self, message: str, session_id: str | None = None, customer_id: str | None = None
     ) -> Iterator[dict[str, Any]]:

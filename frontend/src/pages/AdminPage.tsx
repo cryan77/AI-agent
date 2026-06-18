@@ -1,32 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { authFetch } from "../lib/auth";
+import CustomerSearchInput from "../components/CustomerSearchInput";
 import TraceDashboard from "../components/TraceDashboard";
-import type { ChatResponse, RunMetrics, SessionSummary } from "../types";
+import { authFetch } from "../lib/auth";
+import { DECISION_BADGE, PENDING_BADGE } from "../lib/decisionBadge";
+import { formatDateTime } from "../lib/formatDate";
+import { filterByQuery } from "../lib/search";
+import type { ChatResponse, SessionSummary } from "../types";
 
 type StatusFilter = "all" | "approved" | "denied" | "escalated" | "pending";
 
 const STATUS_FILTERS: { id: StatusFilter; label: string; badgeClass?: string }[] = [
   { id: "all", label: "All" },
-  { id: "approved", label: "Approved", badgeClass: "badge-approved" },
-  { id: "denied", label: "Denied", badgeClass: "badge-denied" },
-  { id: "escalated", label: "Escalated", badgeClass: "badge-escalated" },
-  { id: "pending", label: "Pending", badgeClass: "badge-pending" },
+  { id: "approved", label: "Approved", badgeClass: DECISION_BADGE.approved },
+  { id: "denied", label: "Denied", badgeClass: DECISION_BADGE.denied },
+  { id: "escalated", label: "Escalated", badgeClass: DECISION_BADGE.escalated },
+  { id: "pending", label: "Pending", badgeClass: PENDING_BADGE },
 ];
-
-const decisionBadge: Record<string, string> = {
-  approved: "badge-approved",
-  denied: "badge-denied",
-  escalated: "badge-escalated",
-};
-
-function formatWhen(iso: string) {
-  return new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(iso));
-}
 
 function sessionStatus(s: SessionSummary): Exclude<StatusFilter, "all"> {
   return s.decision ?? "pending";
@@ -45,11 +34,6 @@ export default function AdminPage() {
   const [historySearch, setHistorySearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [trace, setTrace] = useState<ChatResponse | null>(null);
-  const [metrics, setMetrics] = useState<RunMetrics>({
-    token_usage: 0,
-    total_latency_ms: 0,
-    retry_count: 0,
-  });
   const [loading, setLoading] = useState(false);
 
   const customers = useMemo(() => {
@@ -73,13 +57,15 @@ export default function AdminPage() {
     return [...map.values()].sort((a, b) => a.customer_name.localeCompare(b.customer_name));
   }, [sessions]);
 
-  const filteredCustomers = useMemo(() => {
-    const q = customerSearch.trim().toLowerCase();
-    if (!q) return customers;
-    return customers.filter((c) =>
-      [c.customer_id, c.customer_name, c.customer_email].join(" ").toLowerCase().includes(q)
-    );
-  }, [customers, customerSearch]);
+  const filteredCustomers = useMemo(
+    () =>
+      filterByQuery(
+        customers,
+        (c) => [c.customer_id, c.customer_name, c.customer_email].join(" "),
+        customerSearch
+      ),
+    [customers, customerSearch]
+  );
 
   const customerSessions = useMemo(() => {
     if (!selectedCustomerId) return [];
@@ -91,13 +77,10 @@ export default function AdminPage() {
     if (statusFilter !== "all") {
       items = items.filter((s) => sessionStatus(s) === statusFilter);
     }
-    const q = historySearch.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((s) =>
-      [s.user_message, s.reply, s.decision ?? "pending", s.session_id]
-        .join(" ")
-        .toLowerCase()
-        .includes(q)
+    return filterByQuery(
+      items,
+      (s) => [s.user_message, s.reply, s.decision ?? "pending", s.session_id].join(" "),
+      historySearch
     );
   }, [customerSessions, statusFilter, historySearch]);
 
@@ -133,11 +116,6 @@ export default function AdminPage() {
       if (!res.ok) throw new Error("Chat turn not found");
       const data: ChatResponse = await res.json();
       setTrace(data);
-      setMetrics({
-        token_usage: data.token_usage,
-        total_latency_ms: data.total_latency_ms,
-        retry_count: data.retry_count,
-      });
       setSelectedTurnId(turnId);
     } catch {
       setTrace(null);
@@ -188,16 +166,13 @@ export default function AdminPage() {
           <h2>Customers</h2>
           <span className="panel-tag">CRM</span>
         </div>
-        <div className="customers-search">
-          <input
-            type="search"
-            value={customerSearch}
-            onChange={(e) => setCustomerSearch(e.target.value)}
-            placeholder="Search customers…"
-            aria-label="Search customers"
-          />
-        </div>
-        <div className="admin-chat-customer-list">
+        <CustomerSearchInput
+          value={customerSearch}
+          onChange={setCustomerSearch}
+          placeholder="Search customers…"
+          aria-label="Search customers"
+        />
+        <div className="customers-list">
           {customers.length === 0 && (
             <p className="trace-empty">No customer chats yet.</p>
           )}
@@ -226,16 +201,13 @@ export default function AdminPage() {
           <h2>Chat history</h2>
           <span className="panel-tag">Live</span>
         </div>
-        <div className="customers-search">
-          <input
-            type="search"
-            value={historySearch}
-            onChange={(e) => setHistorySearch(e.target.value)}
-            placeholder="Search messages…"
-            disabled={!selectedCustomerId}
-            aria-label="Search chat history"
-          />
-        </div>
+        <CustomerSearchInput
+          value={historySearch}
+          onChange={setHistorySearch}
+          placeholder="Search messages…"
+          disabled={!selectedCustomerId}
+          aria-label="Search chat history"
+        />
         <div className="history-status-filters">
           {STATUS_FILTERS.map(({ id, label, badgeClass }) => (
             <button
@@ -266,7 +238,7 @@ export default function AdminPage() {
           )}
           {filteredHistory.map((s) => {
             const status = sessionStatus(s);
-            const badgeClass = decisionBadge[status] ?? "badge-pending";
+            const badgeClass = DECISION_BADGE[status] ?? PENDING_BADGE;
             return (
               <button
                 key={s.turn_id}
@@ -278,7 +250,7 @@ export default function AdminPage() {
                   <span className={`badge session-status-badge ${badgeClass}`}>
                     {statusLabel(s)}
                   </span>
-                  <span className="session-time">{formatWhen(s.created_at)}</span>
+                  <span className="session-time">{formatDateTime(s.created_at)}</span>
                 </div>
                 <span className="session-msg">{s.user_message.slice(0, 72)}</span>
                 <span className="session-reply">{s.reply.slice(0, 72)}</span>
@@ -296,7 +268,7 @@ export default function AdminPage() {
           <div className="trace-empty">Loading trace…</div>
         </section>
       ) : (
-        <TraceDashboard trace={trace} metrics={metrics} />
+        <TraceDashboard trace={trace} />
       )}
     </main>
   );

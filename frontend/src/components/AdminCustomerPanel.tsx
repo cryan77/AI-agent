@@ -1,20 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import CustomerSearchInput from "./CustomerSearchInput";
 import { authFetch } from "../lib/auth";
-import type { CustomerWithOrders, Order } from "../types";
-
-interface RefundEligibility {
-  order_id: string;
-  eligible: boolean;
-  decision: "approved" | "denied" | "escalated";
-  reason: string;
-  order?: Order;
-}
-
-const decisionBadge: Record<string, string> = {
-  approved: "badge-approved",
-  denied: "badge-denied",
-  escalated: "badge-escalated",
-};
+import { DECISION_BADGE } from "../lib/decisionBadge";
+import { filterByQuery } from "../lib/search";
+import type { CustomerWithOrders, RefundEligibility } from "../types";
 
 export default function AdminCustomerPanel() {
   const [customers, setCustomers] = useState<CustomerWithOrders[]>([]);
@@ -45,21 +34,16 @@ export default function AdminCustomerPanel() {
 
   const selected = customers.find((c) => c.customer.customer_id === selectedId) ?? null;
 
-  const filteredCustomers = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return customers;
-    return customers.filter(({ customer }) => {
-      const haystack = [
-        customer.customer_id,
-        customer.name,
-        customer.email,
-        customer.vip ? "vip" : "",
-      ]
-        .join(" ")
-        .toLowerCase();
-      return haystack.includes(q);
-    });
-  }, [customers, searchQuery]);
+  const filteredCustomers = useMemo(
+    () =>
+      filterByQuery(
+        customers,
+        ({ customer }) =>
+          [customer.customer_id, customer.name, customer.email, customer.vip ? "vip" : ""].join(" "),
+        searchQuery
+      ),
+    [customers, searchQuery]
+  );
 
   const selectCustomer = (customerId: string) => {
     setSelectedId(customerId);
@@ -108,16 +92,13 @@ export default function AdminCustomerPanel() {
           <span className="panel-tag">CRM</span>
         </div>
 
-        <div className="customers-search">
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name, email, or ID…"
-            disabled={loading}
-            aria-label="Search customers"
-          />
-        </div>
+        <CustomerSearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by name, email, or ID…"
+          disabled={loading}
+          aria-label="Search customers"
+        />
 
         <div className="customers-list">
           {loading && <p className="trace-empty">Loading customers…</p>}
@@ -258,7 +239,7 @@ export default function AdminCustomerPanel() {
               <div className="refund-check-result">
                 <div className="refund-check-header">
                   <strong>Refund check — {refundCheck.order_id}</strong>
-                  <span className={`badge ${decisionBadge[refundCheck.decision]}`}>
+                  <span className={`badge ${DECISION_BADGE[refundCheck.decision]}`}>
                     {refundCheck.decision.toUpperCase()}
                   </span>
                 </div>

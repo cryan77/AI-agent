@@ -25,24 +25,17 @@ export default function CustomerPage() {
     setLiveThinking([]);
 
     try {
-      const thinkingSteps: ThinkingStep[] = [];
-
       await streamChat(
         text,
         sessionId,
         (event) => {
           if (event.type === "start") {
             setSessionId(event.session_id);
-          }
-          if (event.type === "thinking") {
-            thinkingSteps.push(event.step);
-            setLiveThinking([...thinkingSteps]);
-          }
-          if (event.type === "done") {
+          } else if (event.type === "thinking") {
+            setLiveThinking((steps) => [...steps, event.step]);
+          } else if (event.type === "done") {
             const data = event.result;
             setSessionId(data.session_id);
-            setLiveThinking([]);
-            setLoading(false);
             setMessages((prev) => [
               ...prev,
               {

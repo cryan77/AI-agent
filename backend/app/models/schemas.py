@@ -79,10 +79,6 @@ class OrderHistoryResponse(BaseModel):
     orders: list[Order]
 
 
-class CustomerListResponse(BaseModel):
-    customers: list[Customer]
-
-
 class CustomerWithOrders(BaseModel):
     customer: Customer
     orders: list[Order]

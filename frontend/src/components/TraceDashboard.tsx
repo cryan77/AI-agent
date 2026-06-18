@@ -1,9 +1,8 @@
-import type { ChatResponse, RunMetrics, TraceCategory } from "../types";
+import type { ChatResponse, TraceCategory } from "../types";
 import { CATEGORY_LABELS } from "../types";
 
 interface Props {
   trace: ChatResponse | null;
-  metrics: RunMetrics;
 }
 
 const statusClass: Record<string, string> = {
@@ -23,7 +22,7 @@ function formatOutput(output: Record<string, unknown> | string): string {
   return typeof output === "string" ? output : JSON.stringify(output, null, 2);
 }
 
-export default function TraceDashboard({ trace, metrics }: Props) {
+export default function TraceDashboard({ trace }: Props) {
   const errorSteps = trace?.trace.filter((s) => s.status === "error") ?? [];
 
   return (
@@ -36,15 +35,19 @@ export default function TraceDashboard({ trace, metrics }: Props) {
       <div className="metrics-bar">
         <div className="metric">
           <span className="metric-label">Latency</span>
-          <span className="metric-value">{metrics.total_latency_ms.toFixed(0)} ms</span>
+          <span className="metric-value">
+            {(trace?.total_latency_ms ?? 0).toFixed(0)} ms
+          </span>
         </div>
         <div className="metric">
           <span className="metric-label">Tokens</span>
-          <span className="metric-value">{metrics.token_usage.toLocaleString()}</span>
+          <span className="metric-value">
+            {(trace?.token_usage ?? 0).toLocaleString()}
+          </span>
         </div>
         <div className="metric">
           <span className="metric-label">Retries / Errors</span>
-          <span className="metric-value">{metrics.retry_count}</span>
+          <span className="metric-value">{trace?.retry_count ?? 0}</span>
         </div>
         {trace?.decision && (
           <div className="metric">

@@ -1,7 +1,7 @@
 import type { ChatResponse, ThinkingStep } from "../types";
 import { toChatErrorMessage } from "./chatErrors";
 
-export type ChatStreamEvent =
+type ChatStreamEvent =
   | { type: "start"; session_id: string }
   | { type: "thinking"; step: ThinkingStep }
   | { type: "done"; result: ChatResponse }

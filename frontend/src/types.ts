@@ -64,15 +64,20 @@ export interface ThinkingStep {
   status?: string;
 }
 
+export interface RefundEligibility {
+  order_id: string;
+  eligible: boolean;
+  decision: "approved" | "denied" | "escalated";
+  reason: string;
+  order?: Order;
+}
+
 export interface ChatMessage {
   role: "user" | "agent";
   content: string;
   sentAt?: string;
   decision?: "approved" | "denied" | "escalated";
   warning?: string;
-  thinking?: ThinkingStep[];
-  thinkingVisible?: boolean;
-  thinkingFading?: boolean;
   error?: boolean;
 }
 
@@ -83,13 +88,6 @@ export interface ChatResponse {
   reason?: string;
   warning?: string;
   trace: TraceStep[];
-  thinking?: ThinkingStep[];
-  token_usage: number;
-  total_latency_ms: number;
-  retry_count: number;
-}
-
-export interface RunMetrics {
   token_usage: number;
   total_latency_ms: number;
   retry_count: number;
