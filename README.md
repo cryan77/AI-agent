@@ -73,7 +73,10 @@ The repo root includes `requirements.txt`, `runtime.txt`, `railway.toml`, and `r
 5. Set variables: `OPENROUTER_API_KEY`, `JWT_SECRET` (see `backend/.env.example`).
 6. Generate a public domain and verify `GET /health`.
 
-**Common build errors:** Do not set a custom build command like `pip install -r backend/requirements.txt` — Python is only installed after Railpack detects the root `requirements.txt`. If you see `No start command detected`, push the latest repo (includes `railway.toml`) or set **Start Command** to `cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT` in the Railway dashboard.
+**Common build errors:**
+- Do not set a custom build command like `pip install -r backend/requirements.txt` — Python is only installed after Railpack detects the root `requirements.txt`.
+- If you see `No start command detected`, push the latest repo (includes `railway.toml`) or set **Start Command** manually in the Railway dashboard.
+- If mise fails on `python@3.11.9` attestations, the repo uses Python 3.12 and `mise.toml` disables attestation verification.
 
 ## Demo Scenarios
 
