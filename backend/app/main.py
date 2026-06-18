@@ -17,6 +17,7 @@ from app.models.schemas import (
     HealthResponse,
     OrderHistoryResponse,
     PolicyResponse,
+    RefundEligibilityResponse,
     SessionListResponse,
     SessionSummary,
     SignInRequest,
@@ -126,6 +127,23 @@ async def get_admin_customers(_admin: UserProfile = Depends(require_admin)):
     rows = data_store.list_all_customers_with_orders()
     return AdminCustomersResponse(
         customers=[CustomerWithOrders(**row) for row in rows]
+    )
+
+
+@app.get("/admin/orders/{order_id}/refund-eligibility", response_model=RefundEligibilityResponse)
+async def get_order_refund_eligibility(
+    order_id: str, _admin: UserProfile = Depends(require_admin)
+):
+    result = data_store.evaluate_refund(order_id)
+    if "order" not in result:
+        raise HTTPException(status_code=404, detail=result.get("reason", "Order not found"))
+    order_data = result["order"]
+    return RefundEligibilityResponse(
+        order_id=order_id.upper(),
+        eligible=result["eligible"],
+        decision=result["decision"],
+        reason=result["reason"],
+        order=Order(**order_data),
     )
 
 

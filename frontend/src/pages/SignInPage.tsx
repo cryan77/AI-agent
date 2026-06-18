@@ -5,9 +5,15 @@ import { useAuth } from "../context/AuthContext";
 import { DEFAULT_PASSWORD } from "../types";
 
 const DEMO_ACCOUNTS = [
-  { email: "john.smith@email.com", name: "John Smith (Customer)" },
-  { email: "mchen@email.com", name: "Michael Chen (Customer)" },
   { email: "admin@email.com", name: "Admin" },
+  { email: "jbrown@email.com", name: "James Brown (Customer)" },
+  { email: "mchen@email.com", name: "Michael Chen (Customer)" },
+  { email: "agarcia@email.com", name: "Amanda Garcia (Customer)" },
+  { email: "clee@email.com", name: "Christopher Lee (Customer)" },
+  { email: "mwhite@email.com", name: "Michelle White (Customer)" },
+  { email: "dharris@email.com", name: "Daniel Harris (Customer)" },
+  { email: "jclark@email.com", name: "Jessica Clark (Customer)" },
+  { email: "mlewis@email.com", name: "Matthew Lewis (Customer)" },
 ];
 
 export default function SignInPage() {

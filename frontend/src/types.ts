@@ -81,4 +81,4 @@ export const CATEGORY_LABELS: Record<TraceCategory, string> = {
   reasoning: "Agent Reasoning",
 };
 
-export const DEFAULT_PASSWORD = "123456";
+export const DEFAULT_PASSWORD = "loopp123";

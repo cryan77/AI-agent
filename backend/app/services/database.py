@@ -7,7 +7,7 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parents[3] / "data"
 DB_PATH = DATA_DIR / "crm.db"
-DEFAULT_PASSWORD = "123456"
+DEFAULT_PASSWORD = "loopp123"
 ADMIN_EMAIL = "admin@email.com"
 
 SCHEMA = """

@@ -81,6 +81,14 @@ class AdminCustomersResponse(BaseModel):
     customers: list[CustomerWithOrders]
 
 
+class RefundEligibilityResponse(BaseModel):
+    order_id: str
+    eligible: bool
+    decision: Literal["approved", "denied", "escalated"]
+    reason: str
+    order: Optional[Order] = None
+
+
 class SignInRequest(BaseModel):
     email: str
     password: str
