@@ -1,5 +1,5 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
-import { DECISION_BADGE } from "../lib/decisionBadge";
+import { DECISION_BADGE, DECISION_LABEL } from "../lib/decisionBadge";
 import { formatTime } from "../lib/formatDate";
 import type { DemoScenario } from "../lib/demoScenarios";
 import type { ChatMessage, ThinkingStep } from "../types";
@@ -155,8 +155,8 @@ export default function ChatPanel({
               <p className="chat-msg-text">{msg.content}</p>
               <div className="chat-msg-footer">
                 {msg.decision && (
-                  <span className={`badge ${DECISION_BADGE[msg.decision]}`}>
-                    {msg.decision.toUpperCase()}
+                  <span className={`badge chat-decision-badge ${DECISION_BADGE[msg.decision]}`}>
+                    {DECISION_LABEL[msg.decision]}
                   </span>
                 )}
                 {msg.sentAt && <time className="chat-msg-time">{formatTime(msg.sentAt)}</time>}

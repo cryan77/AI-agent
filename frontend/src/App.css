@@ -275,9 +275,63 @@
   text-align: center;
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid transparent;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+.badge-approved {
+  background: rgba(42, 135, 3, 0.1);
+  color: var(--approved);
+  border-color: rgba(42, 135, 3, 0.3);
+}
+
+.badge-denied {
+  background: rgba(222, 28, 36, 0.08);
+  color: var(--denied);
+  border-color: rgba(222, 28, 36, 0.3);
+}
+
+.badge-escalated {
+  background: rgba(153, 105, 0, 0.1);
+  color: var(--escalated);
+  border-color: rgba(153, 105, 0, 0.3);
+}
+
 .badge-pending {
-  background: rgba(116, 118, 124, 0.15);
+  background: rgba(116, 118, 124, 0.12);
   color: var(--text-muted);
+  border-color: rgba(116, 118, 124, 0.25);
+}
+
+.warning-badge {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #996900;
+  background: rgba(255, 194, 32, 0.2);
+  border: 1px solid rgba(153, 105, 0, 0.35);
+  padding: 0.15rem 0.45rem;
+  margin-bottom: 0.35rem;
 }
 
 .customers-page {
@@ -1034,9 +1088,16 @@
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding-top: 0.35rem;
+  margin-top: 0.65rem;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--border);
+}
+
+.chat-decision-badge {
+  margin-right: auto;
+  font-size: 0.68rem;
+  padding: 0.22rem 0.55rem;
+  letter-spacing: 0.06em;
 }
 
 .chat-msg-user .chat-msg-footer {
