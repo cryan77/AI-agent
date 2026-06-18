@@ -1,5 +1,4 @@
 import type { ChatResponse, ThinkingStep } from "../types";
-import { apiUrl } from "./api";
 import { toChatErrorMessage } from "./chatErrors";
 
 type ChatStreamEvent =
@@ -14,7 +13,7 @@ export async function streamChat(
   onEvent: (event: ChatStreamEvent) => void,
   fetchFn: (url: string, options?: RequestInit) => Promise<Response>
 ): Promise<void> {
-  const res = await fetchFn(apiUrl("/chat/stream"), {
+  const res = await fetchFn("/chat/stream", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message, session_id: sessionId }),
