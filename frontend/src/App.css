@@ -201,6 +201,35 @@
   min-height: 0;
 }
 
+.customers-search {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.customers-search input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.85rem;
+  color: var(--text);
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+
+.customers-search input:focus {
+  outline: 2px solid var(--wm-blue);
+  outline-offset: -2px;
+  border-color: var(--wm-blue);
+  background: var(--surface);
+}
+
+.customers-search input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .customers-list {
   flex: 1;
   min-height: 0;
