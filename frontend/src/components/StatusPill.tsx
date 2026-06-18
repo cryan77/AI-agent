@@ -1,6 +1,7 @@
-import { DECISION_BADGE, DECISION_LABEL, PENDING_BADGE } from "../lib/decisionBadge";
+import { DECISION_BADGE, DECISION_LABEL, GENERAL_BADGE, GENERAL_LABEL } from "../lib/decisionBadge";
 
-export type StatusKind = "approved" | "denied" | "escalated" | "pending";
+export type RefundStatus = "approved" | "denied" | "escalated";
+export type StatusKind = RefundStatus | "general";
 
 interface Props {
   status: StatusKind;
@@ -9,8 +10,8 @@ interface Props {
 }
 
 export default function StatusPill({ status, label, className = "" }: Props) {
-  const badgeClass = status === "pending" ? PENDING_BADGE : DECISION_BADGE[status];
-  const text = label ?? (status === "pending" ? "Pending" : DECISION_LABEL[status]);
+  const badgeClass = status === "general" ? GENERAL_BADGE : DECISION_BADGE[status];
+  const text = label ?? (status === "general" ? GENERAL_LABEL : DECISION_LABEL[status]);
 
   return <span className={`status-pill ${badgeClass} ${className}`.trim()}>{text}</span>;
 }

@@ -10,4 +10,5 @@ export const DECISION_LABEL: Record<string, string> = {
   escalated: "Escalated",
 };
 
-export const PENDING_BADGE = "badge-pending";
+export const GENERAL_BADGE = "badge-general";
+export const GENERAL_LABEL = "General";

@@ -1,27 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomerSearchInput from "../components/CustomerSearchInput";
-import { IconPanelExpand, IconSearch } from "../components/icons/SidebarIcons";
-import StatusPill, { type StatusKind } from "../components/StatusPill";
+import { IconSearch } from "../components/icons/SidebarIcons";
+import StatusPill from "../components/StatusPill";
 import TraceDashboard from "../components/TraceDashboard";
 import { authFetch } from "../lib/auth";
-import { PENDING_BADGE } from "../lib/decisionBadge";
+import { GENERAL_BADGE } from "../lib/decisionBadge";
 import { customerInitials } from "../lib/customerInitials";
 import { formatDateTime } from "../lib/formatDate";
 import { filterByQuery } from "../lib/search";
 import type { ChatResponse, SessionSummary } from "../types";
 
-type StatusFilter = "all" | "approved" | "denied" | "escalated" | "pending";
+type StatusFilter = "all" | "approved" | "denied" | "escalated" | "general";
 
 const STATUS_FILTERS: { id: StatusFilter; label: string; pillClass?: string }[] = [
   { id: "all", label: "All" },
   { id: "approved", label: "Approved", pillClass: "badge-approved" },
   { id: "denied", label: "Denied", pillClass: "badge-denied" },
   { id: "escalated", label: "Escalated", pillClass: "badge-escalated" },
-  { id: "pending", label: "Pending", pillClass: PENDING_BADGE },
+  { id: "general", label: "General", pillClass: GENERAL_BADGE },
 ];
 
 function sessionStatus(s: SessionSummary): Exclude<StatusFilter, "all"> {
-  return s.decision ?? "pending";
+  return s.decision ?? "general";
 }
 
 export default function AdminPage() {
@@ -90,7 +90,7 @@ export default function AdminPage() {
     }
     return filterByQuery(
       items,
-      (s) => [s.user_message, s.reply, s.decision ?? "pending", s.session_id].join(" "),
+      (s) => [s.user_message, s.reply, s.decision ?? "general", s.session_id].join(" "),
       historySearch
     );
   }, [customerSessions, statusFilter, historySearch]);
@@ -101,7 +101,7 @@ export default function AdminPage() {
       approved: 0,
       denied: 0,
       escalated: 0,
-      pending: 0,
+      general: 0,
     };
     for (const s of customerSessions) {
       counts[sessionStatus(s)] += 1;
@@ -174,15 +174,7 @@ export default function AdminPage() {
     <main className="admin-main admin-main-history">
       <section className="panel admin-customers-rail anim-panel-in">
         <div className="chat-sidebar-top">
-          <div className="chat-sidebar-rail chat-sidebar-top-icons">
-            <span className="rail-icon rail-icon-expand" aria-hidden="true">
-              <IconPanelExpand />
-            </span>
-            <span className="rail-icon rail-icon-search" aria-hidden="true">
-              <IconSearch />
-            </span>
-          </div>
-          <div className="chat-sidebar-main chat-sidebar-inbox">
+          <div className="chat-sidebar-inbox">
             <div className="chat-sidebar-head">
               <h2>Customers</h2>
               <span className="chat-inbox-tag">Inbox</span>
@@ -252,6 +244,7 @@ export default function AdminPage() {
             <button
               key={id}
               type="button"
+              title={label}
               className={`history-status-chip ${pillClass ?? ""} ${statusFilter === id ? "selected" : ""}`}
               onClick={() => setStatusFilter(id)}
               disabled={!selectedCustomerId}
@@ -271,27 +264,28 @@ export default function AdminPage() {
           {selectedCustomerId && customerSessions.length > 0 && filteredHistory.length === 0 && (
             <p className="trace-empty">No messages match your filters.</p>
           )}
-          {filteredHistory.map((s) => {
-            const status = sessionStatus(s) as StatusKind;
-            return (
-              <button
-                key={s.turn_id}
-                type="button"
-                className={`session-item ${selectedTurnId === s.turn_id ? "selected" : ""}`}
-                onClick={() => loadTurn(s.turn_id)}
-              >
-                <div className="session-item-top">
-                  <StatusPill status={status} className="session-status-pill" />
-                  <span className="session-time">{formatDateTime(s.created_at)}</span>
-                </div>
+          {filteredHistory.map((s) => (
+            <button
+              key={s.turn_id}
+              type="button"
+              className={`session-item ${selectedTurnId === s.turn_id ? "selected" : ""}`}
+              onClick={() => loadTurn(s.turn_id)}
+            >
+              <div className="session-item-top">
+                {s.decision ? (
+                  <StatusPill status={s.decision} className="session-status-pill" />
+                ) : (
+                  <span className="session-chat-label">General chat</span>
+                )}
+                <span className="session-time">{formatDateTime(s.created_at)}</span>
+              </div>
                 <span className="session-msg">{s.user_message.slice(0, 72)}</span>
                 <span className="session-reply">{s.reply.slice(0, 72)}</span>
                 <span className="session-meta session-meta-secondary">
                   {s.total_latency_ms.toFixed(0)} ms · {s.retry_count} retr{s.retry_count === 1 ? "y" : "ies"}
                 </span>
               </button>
-            );
-          })}
+          ))}
         </div>
       </section>
 
