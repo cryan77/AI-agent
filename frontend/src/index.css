@@ -1,18 +1,23 @@
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface-2: #242836;
-  --border: #2e3345;
-  --text: #e8eaef;
-  --text-muted: #8b92a8;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
-  --approved: #22c55e;
-  --denied: #ef4444;
-  --escalated: #f59e0b;
-  --success: #22c55e;
-  --error: #ef4444;
-  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --wm-blue: #0071dc;
+  --wm-blue-dark: #004f9a;
+  --wm-blue-hover: #004c91;
+  --wm-yellow: #ffc220;
+  --bg: #f2f2f2;
+  --surface: #ffffff;
+  --surface-2: #f7f7f7;
+  --border: #e3e4e5;
+  --text: #2e2f32;
+  --text-muted: #74767c;
+  --accent: #0071dc;
+  --accent-hover: #004c91;
+  --approved: #2a8703;
+  --denied: #de1c24;
+  --escalated: #996900;
+  --success: #2a8703;
+  --error: #de1c24;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.08);
+  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -37,10 +42,9 @@ body {
   height: 100%;
 }
 
-/* Scrollbars — consistent with admin dashboard trace panel */
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: #c5c5c5 transparent;
 }
 
 *::-webkit-scrollbar {
@@ -53,12 +57,12 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: #c5c5c5;
   border-radius: 3px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: #a0a0a0;
 }
 
 *::-webkit-scrollbar-corner {

@@ -1,5 +1,6 @@
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import BrandLogo from "./BrandLogo";
 import UserMenu from "./UserMenu";
 
 export default function Layout() {
@@ -10,40 +11,41 @@ export default function Layout() {
     location.pathname === path ? "nav-link active" : "nav-link";
 
   return (
-    <div className="app">
-      <header className="header">
-        <div>
-          <h1>Loopp Refund Agent</h1>
-          <p className="subtitle">AI Customer Support — Policy-Enforced Refund Processing</p>
+    <div className="wm-shell">
+      <header className="wm-header">
+        <div className="wm-header-inner">
+          <BrandLogo />
+          <nav className="nav">
+            {!isAdmin && (
+              <>
+                <Link to="/" className={navClass("/")}>
+                  Customer
+                </Link>
+                <Link to="/policy" className={navClass("/policy")}>
+                  Refund Policy
+                </Link>
+              </>
+            )}
+            {isAdmin && (
+              <>
+                <Link to="/admin" className={navClass("/admin")}>
+                  Admin
+                </Link>
+                <Link to="/customers" className={navClass("/customers")}>
+                  Customers
+                </Link>
+                <Link to="/policy" className={navClass("/policy")}>
+                  Refund Policy
+                </Link>
+              </>
+            )}
+            <UserMenu />
+          </nav>
         </div>
-        <nav className="nav">
-          {!isAdmin && (
-            <>
-              <Link to="/" className={navClass("/")}>
-                Customer
-              </Link>
-              <Link to="/policy" className={navClass("/policy")}>
-                Refund Policy
-              </Link>
-            </>
-          )}
-          {isAdmin && (
-            <>
-              <Link to="/admin" className={navClass("/admin")}>
-                Admin
-              </Link>
-              <Link to="/customers" className={navClass("/customers")}>
-                Customers
-              </Link>
-              <Link to="/policy" className={navClass("/policy")}>
-                Refund Policy
-              </Link>
-            </>
-          )}
-          <UserMenu />
-        </nav>
       </header>
-      <Outlet />
+      <div className="app">
+        <Outlet />
+      </div>
     </div>
   );
 }
