@@ -1,37 +1,1352 @@
 [
-  {"order_id": "O001", "customer_id": "C001", "item_name": "Wireless Headphones", "price": 129.99, "purchase_date": "2026-06-01", "status": "Delivered", "final_sale": false},
-  {"order_id": "O002", "customer_id": "C001", "item_name": "Phone Case", "price": 24.99, "purchase_date": "2026-05-20", "status": "Delivered", "final_sale": false},
-  {"order_id": "O003", "customer_id": "C002", "item_name": "Designer Handbag", "price": 899.00, "purchase_date": "2026-06-10", "status": "Delivered", "final_sale": false},
-  {"order_id": "O004", "customer_id": "C002", "item_name": "Silk Scarf", "price": 89.99, "purchase_date": "2026-06-05", "status": "Delivered", "final_sale": true},
-  {"order_id": "O005", "customer_id": "C003", "item_name": "Gaming Monitor", "price": 449.99, "purchase_date": "2026-05-25", "status": "Delivered", "final_sale": false},
-  {"order_id": "O006", "customer_id": "C003", "item_name": "Mechanical Keyboard", "price": 159.99, "purchase_date": "2026-04-01", "status": "Delivered", "final_sale": false},
-  {"order_id": "O007", "customer_id": "C004", "item_name": "Yoga Mat Set", "price": 49.99, "purchase_date": "2026-06-12", "status": "Delivered", "final_sale": false},
-  {"order_id": "O008", "customer_id": "C004", "item_name": "Clearance T-Shirt", "price": 9.99, "purchase_date": "2026-06-08", "status": "Delivered", "final_sale": true},
-  {"order_id": "O009", "customer_id": "C005", "item_name": "Smart Watch Pro", "price": 599.00, "purchase_date": "2026-06-03", "status": "Delivered", "final_sale": false},
-  {"order_id": "O010", "customer_id": "C005", "item_name": "Watch Band", "price": 39.99, "purchase_date": "2026-05-15", "status": "Delivered", "final_sale": false},
-  {"order_id": "O011", "customer_id": "C006", "item_name": "Blender", "price": 79.99, "purchase_date": "2026-06-14", "status": "Delivered", "final_sale": false},
-  {"order_id": "O012", "customer_id": "C006", "item_name": "Coffee Maker", "price": 129.99, "purchase_date": "2026-03-10", "status": "Delivered", "final_sale": false},
-  {"order_id": "O013", "customer_id": "C007", "item_name": "Running Shoes", "price": 119.99, "purchase_date": "2026-06-07", "status": "Lost", "final_sale": false},
-  {"order_id": "O014", "customer_id": "C007", "item_name": "Sports Socks Pack", "price": 19.99, "purchase_date": "2026-06-02", "status": "Delivered", "final_sale": false},
-  {"order_id": "O015", "customer_id": "C008", "item_name": "Laptop Stand", "price": 54.99, "purchase_date": "2026-06-11", "status": "Delivered", "final_sale": false},
-  {"order_id": "O016", "customer_id": "C008", "item_name": "Premium Laptop", "price": 1299.00, "purchase_date": "2026-06-09", "status": "Delivered", "final_sale": false},
-  {"order_id": "O017", "customer_id": "C009", "item_name": "Desk Lamp", "price": 34.99, "purchase_date": "2026-05-28", "status": "Delivered", "final_sale": false},
-  {"order_id": "O018", "customer_id": "C009", "item_name": "Flash Sale Earbuds", "price": 29.99, "purchase_date": "2026-06-06", "status": "Delivered", "final_sale": true},
-  {"order_id": "O019", "customer_id": "C010", "item_name": "Winter Jacket", "price": 189.99, "purchase_date": "2026-06-04", "status": "Delivered", "final_sale": false},
-  {"order_id": "O020", "customer_id": "C010", "item_name": "Gloves", "price": 24.99, "purchase_date": "2026-02-15", "status": "Delivered", "final_sale": false},
-  {"order_id": "O021", "customer_id": "C011", "item_name": "Bookshelf", "price": 149.99, "purchase_date": "2026-06-13", "status": "Delivered", "final_sale": false},
-  {"order_id": "O022", "customer_id": "C011", "item_name": "Outlet Sofa", "price": 399.99, "purchase_date": "2026-06-01", "status": "Delivered", "final_sale": true},
-  {"order_id": "O023", "customer_id": "C012", "item_name": "Tablet", "price": 349.99, "purchase_date": "2026-06-08", "status": "Delivered", "final_sale": false},
-  {"order_id": "O024", "customer_id": "C012", "item_name": "Tablet Case", "price": 29.99, "purchase_date": "2026-06-08", "status": "Delivered", "final_sale": false},
-  {"order_id": "O025", "customer_id": "C013", "item_name": "Camera Lens", "price": 549.00, "purchase_date": "2026-06-10", "status": "Delivered", "final_sale": false},
-  {"order_id": "O026", "customer_id": "C013", "item_name": "Camera Strap", "price": 14.99, "purchase_date": "2026-05-30", "status": "Delivered", "final_sale": false},
-  {"order_id": "O027", "customer_id": "C014", "item_name": "Skincare Set", "price": 64.99, "purchase_date": "2026-06-15", "status": "Delivered", "final_sale": false},
-  {"order_id": "O028", "customer_id": "C014", "item_name": "Perfume", "price": 95.00, "purchase_date": "2026-05-01", "status": "Delivered", "final_sale": false},
-  {"order_id": "O029", "customer_id": "C015", "item_name": "Office Chair", "price": 279.99, "purchase_date": "2026-06-06", "status": "Delivered", "final_sale": false},
-  {"order_id": "O030", "customer_id": "C015", "item_name": "Standing Desk", "price": 650.00, "purchase_date": "2026-06-12", "status": "Delivered", "final_sale": false},
-  {"order_id": "O101", "customer_id": "C001", "item_name": "Bluetooth Speaker", "price": 79.99, "purchase_date": "2026-06-10", "status": "Delivered", "final_sale": false},
-  {"order_id": "O102", "customer_id": "C003", "item_name": "Clearance Gaming Mouse", "price": 19.99, "purchase_date": "2026-06-05", "status": "Delivered", "final_sale": true},
-  {"order_id": "O103", "customer_id": "C005", "item_name": "Home Theater System", "price": 749.99, "purchase_date": "2026-06-08", "status": "Delivered", "final_sale": false},
-  {"order_id": "O104", "customer_id": "C007", "item_name": "Fitness Tracker", "price": 99.99, "purchase_date": "2026-06-11", "status": "Delivered", "final_sale": false},
-  {"order_id": "O105", "customer_id": "C009", "item_name": "USB Hub", "price": 22.99, "purchase_date": "2026-01-20", "status": "Delivered", "final_sale": false}
+  {
+    "order_id": "O001",
+    "customer_id": "C001",
+    "item_name": "Wireless Headphones",
+    "price": 59.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O002",
+    "customer_id": "C001",
+    "item_name": "Phone Case",
+    "price": 36.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O003",
+    "customer_id": "C001",
+    "item_name": "Bluetooth Speaker",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O004",
+    "customer_id": "C001",
+    "item_name": "Laptop Sleeve",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O005",
+    "customer_id": "C001",
+    "item_name": "Portable Charger",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O006",
+    "customer_id": "C001",
+    "item_name": "Webcam HD",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O007",
+    "customer_id": "C001",
+    "item_name": "Mouse Pad XL",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O008",
+    "customer_id": "C001",
+    "item_name": "Keyboard Wrist Rest",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O009",
+    "customer_id": "C001",
+    "item_name": "Monitor Light Bar",
+    "price": 32.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O010",
+    "customer_id": "C001",
+    "item_name": "HDMI Cable 6ft",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O011",
+    "customer_id": "C002",
+    "item_name": "Designer Handbag",
+    "price": 63.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O012",
+    "customer_id": "C002",
+    "item_name": "Silk Scarf",
+    "price": 40.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O013",
+    "customer_id": "C002",
+    "item_name": "Leather Wallet",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O014",
+    "customer_id": "C002",
+    "item_name": "Sunglasses",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O015",
+    "customer_id": "C002",
+    "item_name": "Pearl Earrings",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O016",
+    "customer_id": "C002",
+    "item_name": "Cashmere Gloves",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O017",
+    "customer_id": "C002",
+    "item_name": "Evening Clutch",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O018",
+    "customer_id": "C002",
+    "item_name": "Gold Bracelet",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O019",
+    "customer_id": "C002",
+    "item_name": "Wool Coat",
+    "price": 36.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O020",
+    "customer_id": "C002",
+    "item_name": "Silk Blouse",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O021",
+    "customer_id": "C003",
+    "item_name": "Gaming Monitor",
+    "price": 66.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O022",
+    "customer_id": "C003",
+    "item_name": "Mechanical Keyboard",
+    "price": 43.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O023",
+    "customer_id": "C003",
+    "item_name": "Gaming Mouse",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O024",
+    "customer_id": "C003",
+    "item_name": "Headset Stand",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O025",
+    "customer_id": "C003",
+    "item_name": "RGB Mouse Pad",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O026",
+    "customer_id": "C003",
+    "item_name": "Controller Grip",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O027",
+    "customer_id": "C003",
+    "item_name": "Capture Card",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O028",
+    "customer_id": "C003",
+    "item_name": "Streaming Mic",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O029",
+    "customer_id": "C003",
+    "item_name": "Desk Mat",
+    "price": 39.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O030",
+    "customer_id": "C003",
+    "item_name": "Cable Management Kit",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O031",
+    "customer_id": "C004",
+    "item_name": "Yoga Mat Set",
+    "price": 70.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O032",
+    "customer_id": "C004",
+    "item_name": "Resistance Bands",
+    "price": 47.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O033",
+    "customer_id": "C004",
+    "item_name": "Foam Roller",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O034",
+    "customer_id": "C004",
+    "item_name": "Jump Rope",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O035",
+    "customer_id": "C004",
+    "item_name": "Fitness Ball",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O036",
+    "customer_id": "C004",
+    "item_name": "Ankle Weights",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O037",
+    "customer_id": "C004",
+    "item_name": "Pilates Ring",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O038",
+    "customer_id": "C004",
+    "item_name": "Workout Gloves",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O039",
+    "customer_id": "C004",
+    "item_name": "Gym Towel Set",
+    "price": 43.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O040",
+    "customer_id": "C004",
+    "item_name": "Protein Shaker",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O041",
+    "customer_id": "C005",
+    "item_name": "Smart Watch Pro",
+    "price": 73.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O042",
+    "customer_id": "C005",
+    "item_name": "Watch Band",
+    "price": 50.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O043",
+    "customer_id": "C005",
+    "item_name": "Fitness Tracker",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O044",
+    "customer_id": "C005",
+    "item_name": "Wireless Charger",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O045",
+    "customer_id": "C005",
+    "item_name": "Screen Protector",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O046",
+    "customer_id": "C005",
+    "item_name": "Car Mount",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O047",
+    "customer_id": "C005",
+    "item_name": "Power Bank",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O048",
+    "customer_id": "C005",
+    "item_name": "Ear Tips Pack",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O049",
+    "customer_id": "C005",
+    "item_name": "Travel Case",
+    "price": 46.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O050",
+    "customer_id": "C005",
+    "item_name": "Sport Band",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O051",
+    "customer_id": "C006",
+    "item_name": "Blender",
+    "price": 77.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O052",
+    "customer_id": "C006",
+    "item_name": "Coffee Maker",
+    "price": 54.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O053",
+    "customer_id": "C006",
+    "item_name": "Toaster Oven",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O054",
+    "customer_id": "C006",
+    "item_name": "Air Fryer",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O055",
+    "customer_id": "C006",
+    "item_name": "Mixing Bowl Set",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O056",
+    "customer_id": "C006",
+    "item_name": "Knife Block",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O057",
+    "customer_id": "C006",
+    "item_name": "Cutting Board",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O058",
+    "customer_id": "C006",
+    "item_name": "Spice Rack",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O059",
+    "customer_id": "C006",
+    "item_name": "Food Storage Set",
+    "price": 50.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O060",
+    "customer_id": "C006",
+    "item_name": "Electric Kettle",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O061",
+    "customer_id": "C007",
+    "item_name": "Running Shoes",
+    "price": 80.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O062",
+    "customer_id": "C007",
+    "item_name": "Sports Socks Pack",
+    "price": 57.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O063",
+    "customer_id": "C007",
+    "item_name": "Athletic Shorts",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O064",
+    "customer_id": "C007",
+    "item_name": "Compression Shirt",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O065",
+    "customer_id": "C007",
+    "item_name": "Hydration Belt",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O066",
+    "customer_id": "C007",
+    "item_name": "Tennis Racket",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O067",
+    "customer_id": "C007",
+    "item_name": "Golf Tees Pack",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O068",
+    "customer_id": "C007",
+    "item_name": "Bike Helmet",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O069",
+    "customer_id": "C007",
+    "item_name": "Swim Goggles",
+    "price": 53.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O070",
+    "customer_id": "C007",
+    "item_name": "Trail Running Cap",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O071",
+    "customer_id": "C008",
+    "item_name": "Laptop Stand",
+    "price": 84.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O072",
+    "customer_id": "C008",
+    "item_name": "Premium Laptop",
+    "price": 61.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O073",
+    "customer_id": "C008",
+    "item_name": "Docking Station",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O074",
+    "customer_id": "C008",
+    "item_name": "External SSD 1TB",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O075",
+    "customer_id": "C008",
+    "item_name": "Wireless Mouse",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O076",
+    "customer_id": "C008",
+    "item_name": "Privacy Screen",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O077",
+    "customer_id": "C008",
+    "item_name": "Cable Hub",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O078",
+    "customer_id": "C008",
+    "item_name": "Laptop Bag",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O079",
+    "customer_id": "C008",
+    "item_name": "Webcam Cover",
+    "price": 57.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O080",
+    "customer_id": "C008",
+    "item_name": "Ergonomic Chair Pad",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O081",
+    "customer_id": "C009",
+    "item_name": "Desk Lamp",
+    "price": 87.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O082",
+    "customer_id": "C009",
+    "item_name": "Flash Sale Earbuds",
+    "price": 64.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O083",
+    "customer_id": "C009",
+    "item_name": "Notebook Set",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O084",
+    "customer_id": "C009",
+    "item_name": "Pen Holder",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O085",
+    "customer_id": "C009",
+    "item_name": "Whiteboard Markers",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O086",
+    "customer_id": "C009",
+    "item_name": "File Organizer",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O087",
+    "customer_id": "C009",
+    "item_name": "Bookends Pair",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O088",
+    "customer_id": "C009",
+    "item_name": "Desk Calendar",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O089",
+    "customer_id": "C009",
+    "item_name": "Sticky Notes Pack",
+    "price": 60.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O090",
+    "customer_id": "C009",
+    "item_name": "Paper Shredder Mini",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O091",
+    "customer_id": "C010",
+    "item_name": "Winter Jacket",
+    "price": 91.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O092",
+    "customer_id": "C010",
+    "item_name": "Gloves",
+    "price": 68.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O093",
+    "customer_id": "C010",
+    "item_name": "Wool Beanie",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O094",
+    "customer_id": "C010",
+    "item_name": "Thermal Leggings",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O095",
+    "customer_id": "C010",
+    "item_name": "Snow Boots",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O096",
+    "customer_id": "C010",
+    "item_name": "Hand Warmers Pack",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O097",
+    "customer_id": "C010",
+    "item_name": "Scarf Set",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O098",
+    "customer_id": "C010",
+    "item_name": "Insulated Mug",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O099",
+    "customer_id": "C010",
+    "item_name": "Heated Blanket",
+    "price": 64.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O100",
+    "customer_id": "C010",
+    "item_name": "Rain Poncho",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O101",
+    "customer_id": "C011",
+    "item_name": "Bookshelf",
+    "price": 94.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O102",
+    "customer_id": "C011",
+    "item_name": "Outlet Sofa",
+    "price": 71.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O103",
+    "customer_id": "C011",
+    "item_name": "Throw Pillow Set",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O104",
+    "customer_id": "C011",
+    "item_name": "Area Rug",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O105",
+    "customer_id": "C011",
+    "item_name": "Wall Mirror",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O106",
+    "customer_id": "C011",
+    "item_name": "Coat Rack",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O107",
+    "customer_id": "C011",
+    "item_name": "Shoe Rack",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O108",
+    "customer_id": "C011",
+    "item_name": "Curtain Rods",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O109",
+    "customer_id": "C011",
+    "item_name": "Picture Frame Set",
+    "price": 67.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O110",
+    "customer_id": "C011",
+    "item_name": "Storage Ottoman",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O111",
+    "customer_id": "C012",
+    "item_name": "Tablet",
+    "price": 98.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O112",
+    "customer_id": "C012",
+    "item_name": "Tablet Case",
+    "price": 75.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O113",
+    "customer_id": "C012",
+    "item_name": "Stylus Pen",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O114",
+    "customer_id": "C012",
+    "item_name": "Screen Film",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O115",
+    "customer_id": "C012",
+    "item_name": "Folio Cover",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O116",
+    "customer_id": "C012",
+    "item_name": "Carrying Sleeve",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O117",
+    "customer_id": "C012",
+    "item_name": "Stand Mount",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O118",
+    "customer_id": "C012",
+    "item_name": "Keyboard Folio",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O119",
+    "customer_id": "C012",
+    "item_name": "Protective Shell",
+    "price": 71.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O120",
+    "customer_id": "C012",
+    "item_name": "Charging Dock",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O121",
+    "customer_id": "C013",
+    "item_name": "Camera Lens",
+    "price": 101.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O122",
+    "customer_id": "C013",
+    "item_name": "Camera Strap",
+    "price": 78.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O123",
+    "customer_id": "C013",
+    "item_name": "Tripod Compact",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O124",
+    "customer_id": "C013",
+    "item_name": "Lens Filter Kit",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O125",
+    "customer_id": "C013",
+    "item_name": "Memory Card 128GB",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O126",
+    "customer_id": "C013",
+    "item_name": "Camera Bag",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O127",
+    "customer_id": "C013",
+    "item_name": "Remote Shutter",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O128",
+    "customer_id": "C013",
+    "item_name": "Cleaning Kit",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O129",
+    "customer_id": "C013",
+    "item_name": "Flash Diffuser",
+    "price": 74.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O130",
+    "customer_id": "C013",
+    "item_name": "Gimbal Stabilizer",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O131",
+    "customer_id": "C014",
+    "item_name": "Skincare Set",
+    "price": 105.49,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O132",
+    "customer_id": "C014",
+    "item_name": "Perfume",
+    "price": 82.1,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O133",
+    "customer_id": "C014",
+    "item_name": "Face Moisturizer",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O134",
+    "customer_id": "C014",
+    "item_name": "Hair Serum",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O135",
+    "customer_id": "C014",
+    "item_name": "Body Lotion",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O136",
+    "customer_id": "C014",
+    "item_name": "Lip Balm Trio",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O137",
+    "customer_id": "C014",
+    "item_name": "Sunscreen SPF50",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O138",
+    "customer_id": "C014",
+    "item_name": "Makeup Brush Set",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O139",
+    "customer_id": "C014",
+    "item_name": "Bath Bomb Set",
+    "price": 78.29,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O140",
+    "customer_id": "C014",
+    "item_name": "Hand Cream Pack",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O141",
+    "customer_id": "C015",
+    "item_name": "Office Chair",
+    "price": 108.99,
+    "purchase_date": "2026-06-14",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O142",
+    "customer_id": "C015",
+    "item_name": "Standing Desk",
+    "price": 85.6,
+    "purchase_date": "2026-06-10",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O143",
+    "customer_id": "C015",
+    "item_name": "Monitor Arm",
+    "price": 19.99,
+    "purchase_date": "2026-06-08",
+    "status": "Delivered",
+    "final_sale": true
+  },
+  {
+    "order_id": "O144",
+    "customer_id": "C015",
+    "item_name": "Foot Rest",
+    "price": 899.0,
+    "purchase_date": "2026-06-12",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O145",
+    "customer_id": "C015",
+    "item_name": "Cable Tray",
+    "price": 42.0,
+    "purchase_date": "2026-04-20",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O146",
+    "customer_id": "C015",
+    "item_name": "Desk Drawer Unit",
+    "price": 89.99,
+    "purchase_date": "2026-06-05",
+    "status": "Lost",
+    "final_sale": false
+  },
+  {
+    "order_id": "O147",
+    "customer_id": "C015",
+    "item_name": "Anti-Fatigue Mat",
+    "price": 28.0,
+    "purchase_date": "2026-06-15",
+    "status": "Shipped",
+    "final_sale": false
+  },
+  {
+    "order_id": "O148",
+    "customer_id": "C015",
+    "item_name": "Document Tray",
+    "price": 24.99,
+    "purchase_date": "2026-06-11",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O149",
+    "customer_id": "C015",
+    "item_name": "Whiteboard Small",
+    "price": 81.79,
+    "purchase_date": "2026-06-09",
+    "status": "Delivered",
+    "final_sale": false
+  },
+  {
+    "order_id": "O150",
+    "customer_id": "C015",
+    "item_name": "Desk Fan USB",
+    "price": 45.0,
+    "purchase_date": "2026-06-07",
+    "status": "Delivered",
+    "final_sale": true
+  }
 ]

@@ -15,6 +15,7 @@ from app.models.schemas import (
     ChatResponse,
     CustomerWithOrders,
     HealthResponse,
+    Order,
     OrderHistoryResponse,
     PolicyResponse,
     RefundEligibilityResponse,
