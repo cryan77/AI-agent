@@ -112,8 +112,13 @@ class AuthResponse(BaseModel):
 
 
 class SessionSummary(BaseModel):
+    turn_id: str
     session_id: str
+    customer_id: str
+    customer_name: str = ""
+    customer_email: str = ""
     user_message: str
+    reply: str = ""
     decision: Optional[Literal["approved", "denied", "escalated"]] = None
     created_at: str
     total_latency_ms: float

@@ -58,6 +58,16 @@ def _ownership_warning(message: str, customer_id: str) -> str | None:
     return None
 
 
+def _save_customer_turn(result: dict, user_message: str, customer: UserProfile) -> None:
+    save_session(
+        result,
+        user_message,
+        customer_id=customer.customer_id or "",
+        customer_name=customer.name,
+        customer_email=customer.email,
+    )
+
+
 def _blocked_ownership_result(session_id: str, warning: str) -> dict:
     return {
         "session_id": session_id,
@@ -170,11 +180,11 @@ async def get_sessions(_admin: UserProfile = Depends(require_admin)):
     return SessionListResponse(sessions=[SessionSummary(**s) for s in list_sessions()])
 
 
-@app.get("/sessions/{session_id}", response_model=ChatResponse)
-async def get_session_detail(session_id: str, _admin: UserProfile = Depends(require_admin)):
-    session = get_session(session_id)
+@app.get("/sessions/{turn_id}", response_model=ChatResponse)
+async def get_session_detail(turn_id: str, _admin: UserProfile = Depends(require_admin)):
+    session = get_session(turn_id)
     if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
+        raise HTTPException(status_code=404, detail="Chat turn not found")
     return ChatResponse(
         session_id=session["session_id"],
         reply=session["reply"],
@@ -199,14 +209,14 @@ async def chat(request: ChatRequest, current: UserProfile = Depends(require_cust
     if warning:
         session_id = request.session_id or str(uuid.uuid4())
         result = _blocked_ownership_result(session_id, warning)
-        save_session(result, request.message)
+        _save_customer_turn(result, request.message, current)
         return ChatResponse(**result)
 
     try:
         set_request_customer_id(customer_id)
         reset_trace()
         result = agent.run(request.message, request.session_id, customer_id=customer_id)
-        save_session(result, request.message)
+        _save_customer_turn(result, request.message, current)
         return ChatResponse(**result)
     except Exception as e:
         raise HTTPException(status_code=502, detail=format_llm_error(e)) from e
@@ -227,14 +237,14 @@ async def chat_stream(request: ChatRequest, current: UserProfile = Depends(requi
             if warning:
                 session_id = request.session_id or str(uuid.uuid4())
                 result = _blocked_ownership_result(session_id, warning)
-                save_session(result, request.message)
+                _save_customer_turn(result, request.message, current)
                 yield f"data: {json.dumps({'type': 'done', 'result': result})}\n\n"
                 return
 
             set_request_customer_id(customer_id)
             for event in agent.run_stream(request.message, request.session_id, customer_id=customer_id):
                 if event.get("type") == "done":
-                    save_session(event["result"], request.message)
+                    _save_customer_turn(event["result"], request.message, current)
                 yield f"data: {json.dumps(event, default=str)}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'type': 'error', 'detail': format_llm_error(e)})}\n\n"

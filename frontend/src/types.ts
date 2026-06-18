@@ -29,8 +29,13 @@ export interface CustomerWithOrders {
 }
 
 export interface SessionSummary {
+  turn_id: string;
   session_id: string;
+  customer_id: string;
+  customer_name: string;
+  customer_email: string;
   user_message: string;
+  reply: string;
   decision?: "approved" | "denied" | "escalated";
   created_at: string;
   total_latency_ms: number;
