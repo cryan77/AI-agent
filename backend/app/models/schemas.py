@@ -37,6 +37,16 @@ class TraceStep(BaseModel):
     status: Literal["success", "error", "retry"] = "success"
 
 
+class ThinkingStep(BaseModel):
+    kind: Literal["reasoning", "tool"]
+    label: str
+    text: str = ""
+    tool: Optional[str] = None
+    detail: dict[str, Any] = {}
+    planned_tools: list[str] = []
+    status: str = "success"
+
+
 class ChatRequest(BaseModel):
     message: str
     session_id: Optional[str] = None
@@ -49,6 +59,7 @@ class ChatResponse(BaseModel):
     reason: Optional[str] = None
     warning: Optional[str] = None
     trace: list[TraceStep]
+    thinking: list[ThinkingStep] = []
     token_usage: int
     total_latency_ms: float
     retry_count: int

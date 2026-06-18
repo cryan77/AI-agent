@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import uuid
@@ -6,6 +7,7 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import StreamingResponse
 
 from app.agent.graph import RefundAgent
 from app.models.schemas import (
@@ -54,6 +56,21 @@ def _ownership_warning(message: str, customer_id: str) -> str | None:
                 "You can only request refunds for your own orders."
             )
     return None
+
+
+def _blocked_ownership_result(session_id: str, warning: str) -> dict:
+    return {
+        "session_id": session_id,
+        "reply": warning,
+        "decision": "denied",
+        "reason": warning,
+        "warning": warning,
+        "trace": [],
+        "thinking": [],
+        "token_usage": 0,
+        "total_latency_ms": 0,
+        "retry_count": 0,
+    }
 
 
 @asynccontextmanager
@@ -165,6 +182,7 @@ async def get_session_detail(session_id: str, _admin: UserProfile = Depends(requ
         reason=session.get("reason"),
         warning=session.get("warning"),
         trace=session["trace"],
+        thinking=session.get("thinking", []),
         token_usage=session["token_usage"],
         total_latency_ms=session["total_latency_ms"],
         retry_count=session["retry_count"],
@@ -180,17 +198,7 @@ async def chat(request: ChatRequest, current: UserProfile = Depends(require_cust
     warning = _ownership_warning(request.message, customer_id)
     if warning:
         session_id = request.session_id or str(uuid.uuid4())
-        result = {
-            "session_id": session_id,
-            "reply": warning,
-            "decision": "denied",
-            "reason": warning,
-            "warning": warning,
-            "trace": [],
-            "token_usage": 0,
-            "total_latency_ms": 0,
-            "retry_count": 0,
-        }
+        result = _blocked_ownership_result(session_id, warning)
         save_session(result, request.message)
         return ChatResponse(**result)
 
@@ -204,3 +212,37 @@ async def chat(request: ChatRequest, current: UserProfile = Depends(require_cust
         raise HTTPException(status_code=502, detail=format_llm_error(e)) from e
     finally:
         set_request_customer_id(None)
+
+
+@app.post("/chat/stream")
+async def chat_stream(request: ChatRequest, current: UserProfile = Depends(require_customer)):
+    if agent is None:
+        raise HTTPException(status_code=503, detail="Agent not initialized")
+
+    customer_id = current.customer_id  # type: ignore[assignment]
+    warning = _ownership_warning(request.message, customer_id)
+
+    def event_stream():
+        try:
+            if warning:
+                session_id = request.session_id or str(uuid.uuid4())
+                result = _blocked_ownership_result(session_id, warning)
+                save_session(result, request.message)
+                yield f"data: {json.dumps({'type': 'done', 'result': result})}\n\n"
+                return
+
+            set_request_customer_id(customer_id)
+            for event in agent.run_stream(request.message, request.session_id, customer_id=customer_id):
+                if event.get("type") == "done":
+                    save_session(event["result"], request.message)
+                yield f"data: {json.dumps(event, default=str)}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'type': 'error', 'detail': format_llm_error(e)})}\n\n"
+        finally:
+            set_request_customer_id(None)
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

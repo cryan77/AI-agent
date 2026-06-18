@@ -49,11 +49,23 @@ export interface TraceStep {
   status: "success" | "error" | "retry";
 }
 
+export interface ThinkingStep {
+  kind: "reasoning" | "tool";
+  label: string;
+  text?: string;
+  tool?: string;
+  detail?: Record<string, unknown>;
+  planned_tools?: string[];
+  status?: string;
+}
+
 export interface ChatMessage {
   role: "user" | "agent";
   content: string;
   decision?: "approved" | "denied" | "escalated";
   warning?: string;
+  thinking?: ThinkingStep[];
+  thinkingVisible?: boolean;
 }
 
 export interface ChatResponse {
@@ -63,6 +75,7 @@ export interface ChatResponse {
   reason?: string;
   warning?: string;
   trace: TraceStep[];
+  thinking?: ThinkingStep[];
   token_usage: number;
   total_latency_ms: number;
   retry_count: number;

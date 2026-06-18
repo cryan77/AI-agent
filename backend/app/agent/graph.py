@@ -2,7 +2,8 @@
 
 import time
 import uuid
-from typing import Annotated, Literal, TypedDict
+from collections.abc import Iterator
+from typing import Annotated, Any, Literal, TypedDict
 
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
@@ -11,7 +12,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
 from app.agent.prompts import SYSTEM_PROMPT
-from app.agent.tools import ALL_TOOLS, get_trace, record_reasoning, reset_trace, set_request_customer_id
+from app.agent.tools import ALL_TOOLS, CATEGORY_LABELS, get_trace, record_reasoning, reset_trace, set_request_customer_id
 from app.models.schemas import TraceStep
 
 
@@ -22,6 +23,18 @@ class AgentState(TypedDict):
     reason: str | None
     token_usage: int
     retry_count: int
+
+
+TOOL_THINKING_LABELS: dict[str, str] = {
+    "get_customer": "Looking up customer profile in CRM",
+    "get_order": "Fetching order details from database",
+    "get_refund_policy": "Reading corporate refund policy",
+    "evaluate_order_for_refund": "Evaluating order against refund rules",
+    "approve_refund": "Processing refund approval",
+    "deny_refund": "Processing refund denial",
+    "escalate_to_human": "Escalating case to human agent",
+    "agent_reasoning": "Planning next steps",
+}
 
 
 def _extract_decision() -> tuple[str | None, str | None]:
@@ -44,6 +57,74 @@ def _extract_warning() -> str | None:
         if isinstance(output, dict) and output.get("error") == "ownership_denied":
             return output.get("message")
     return None
+
+
+def _extract_reply(final_state: AgentState) -> str:
+    reply = ""
+    for msg in reversed(final_state["messages"]):
+        if isinstance(msg, AIMessage) and msg.content and not msg.tool_calls:
+            reply = msg.content if isinstance(msg.content, str) else str(msg.content)
+            break
+    if not reply:
+        for msg in reversed(final_state["messages"]):
+            if isinstance(msg, AIMessage) and msg.content:
+                reply = msg.content if isinstance(msg.content, str) else str(msg.content)
+                break
+    return reply or "I was unable to process your request. Please provide an order ID."
+
+
+def format_thinking_step(entry: dict) -> dict:
+    tool = entry["tool"]
+    category = entry.get("category", "decision")
+    if category == "reasoning":
+        planned = entry.get("input", {}).get("planned_tools") or []
+        text = entry.get("output")
+        if isinstance(text, dict):
+            text = str(text)
+        return {
+            "kind": "reasoning",
+            "label": TOOL_THINKING_LABELS.get(tool, "Reasoning"),
+            "text": text or "",
+            "planned_tools": planned,
+        }
+    label = TOOL_THINKING_LABELS.get(tool, CATEGORY_LABELS.get(category, tool))
+    return {
+        "kind": "tool",
+        "label": label,
+        "tool": tool,
+        "detail": entry.get("input", {}),
+        "status": entry.get("status", "success"),
+    }
+
+
+def _build_result(final_state: AgentState, session_id: str, start: float, trace_raw: list) -> dict:
+    retry_count = sum(1 for t in trace_raw if t.get("status") == "error")
+    decision, reason = _extract_decision()
+    trace_steps = [
+        TraceStep(
+            step=i + 1,
+            tool=t["tool"],
+            category=t.get("category", "decision"),
+            input=t["input"],
+            output=t["output"],
+            latency_ms=t["latency_ms"],
+            status=t["status"],
+        )
+        for i, t in enumerate(trace_raw)
+    ]
+    thinking = [format_thinking_step(t) for t in trace_raw]
+    return {
+        "session_id": session_id,
+        "reply": _extract_reply(final_state),
+        "decision": decision,
+        "reason": reason,
+        "warning": _extract_warning(),
+        "trace": [step.model_dump() for step in trace_steps],
+        "thinking": thinking,
+        "token_usage": final_state.get("token_usage", 0),
+        "total_latency_ms": round((time.perf_counter() - start) * 1000, 2),
+        "retry_count": retry_count,
+    }
 
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -108,14 +189,8 @@ class RefundAgent:
         graph.add_edge("tools", "agent")
         return graph.compile()
 
-    def run(self, message: str, session_id: str | None = None, customer_id: str | None = None) -> dict:
-        reset_trace()
-        set_request_customer_id(customer_id)
-        session_id = session_id or str(uuid.uuid4())
-        start = time.perf_counter()
-        retry_count = 0
-
-        initial_state: AgentState = {
+    def _initial_state(self, message: str, session_id: str) -> AgentState:
+        return {
             "messages": [HumanMessage(content=message)],
             "session_id": session_id,
             "decision": None,
@@ -124,48 +199,44 @@ class RefundAgent:
             "retry_count": 0,
         }
 
+    def _yield_new_trace_steps(self, last_trace_len: int) -> tuple[list[dict[str, Any]], int]:
+        events: list[dict[str, Any]] = []
+        trace = get_trace()
+        while last_trace_len < len(trace):
+            events.append({"type": "thinking", "step": format_thinking_step(trace[last_trace_len])})
+            last_trace_len += 1
+        return events, last_trace_len
+
+    def run(self, message: str, session_id: str | None = None, customer_id: str | None = None) -> dict:
+        reset_trace()
+        set_request_customer_id(customer_id)
+        session_id = session_id or str(uuid.uuid4())
+        start = time.perf_counter()
+        initial_state = self._initial_state(message, session_id)
         final_state = self.graph.invoke(initial_state, {"recursion_limit": 15})
-        total_latency = (time.perf_counter() - start) * 1000
+        return _build_result(final_state, session_id, start, get_trace())
 
-        # Count retries (blocked approve attempts)
-        trace_raw = get_trace()
-        retry_count = sum(1 for t in trace_raw if t.get("status") == "error")
+    def run_stream(
+        self, message: str, session_id: str | None = None, customer_id: str | None = None
+    ) -> Iterator[dict[str, Any]]:
+        reset_trace()
+        set_request_customer_id(customer_id)
+        session_id = session_id or str(uuid.uuid4())
+        start = time.perf_counter()
+        initial_state = self._initial_state(message, session_id)
 
-        decision, reason = _extract_decision()
+        yield {"type": "start", "session_id": session_id}
 
-        # Get final AI reply
-        reply = ""
-        for msg in reversed(final_state["messages"]):
-            if isinstance(msg, AIMessage) and msg.content and not msg.tool_calls:
-                reply = msg.content if isinstance(msg.content, str) else str(msg.content)
-                break
-        if not reply:
-            for msg in reversed(final_state["messages"]):
-                if isinstance(msg, AIMessage) and msg.content:
-                    reply = msg.content if isinstance(msg.content, str) else str(msg.content)
-                    break
+        last_trace_len = 0
+        final_state: AgentState | None = None
+        for state in self.graph.stream(initial_state, {"recursion_limit": 15}, stream_mode="values"):
+            final_state = state
+            events, last_trace_len = self._yield_new_trace_steps(last_trace_len)
+            for event in events:
+                yield event
 
-        trace_steps = [
-            TraceStep(
-                step=i + 1,
-                tool=t["tool"],
-                category=t.get("category", "decision"),
-                input=t["input"],
-                output=t["output"],
-                latency_ms=t["latency_ms"],
-                status=t["status"],
-            )
-            for i, t in enumerate(trace_raw)
-        ]
+        if final_state is None:
+            final_state = self.graph.invoke(initial_state, {"recursion_limit": 15})
 
-        return {
-            "session_id": session_id,
-            "reply": reply or "I was unable to process your request. Please provide an order ID.",
-            "decision": decision,
-            "reason": reason,
-            "warning": _extract_warning(),
-            "trace": trace_steps,
-            "token_usage": final_state.get("token_usage", 0),
-            "total_latency_ms": round(total_latency, 2),
-            "retry_count": retry_count,
-        }
+        result = _build_result(final_state, session_id, start, get_trace())
+        yield {"type": "done", "result": result}
