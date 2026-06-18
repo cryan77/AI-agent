@@ -64,16 +64,16 @@ Open **http://127.0.0.1:5173**
 
 ## Deploy Backend (Railway)
 
-The repo root includes `requirements.txt`, `runtime.txt`, and `nixpacks.toml` so Railway installs Python and runs the API with access to the `data/` folder.
+The repo root includes `requirements.txt`, `runtime.txt`, `railway.toml`, and `railpack.json` so Railway (Railpack) installs Python and starts the API with access to the `data/` folder.
 
 1. Create a Railway project from this GitHub repo.
 2. **Root Directory:** leave empty (repo root).
-3. **Build Command:** leave empty — Nixpacks runs `pip install -r requirements.txt` automatically.
-4. **Start Command:** leave empty — `nixpacks.toml` starts `uvicorn` from `backend/`.
+3. **Build Command:** leave empty — Railpack runs `pip install -r requirements.txt` automatically.
+4. **Start Command:** leave empty — `railway.toml` / `railpack.json` start `uvicorn` from `backend/`.
 5. Set variables: `OPENROUTER_API_KEY`, `JWT_SECRET` (see `backend/.env.example`).
 6. Generate a public domain and verify `GET /health`.
 
-If you set a custom build command like `pip install -r backend/requirements.txt`, the build fails with `pip: not found` because Python is not installed until Nixpacks detects the root `requirements.txt`.
+**Common build errors:** Do not set a custom build command like `pip install -r backend/requirements.txt` — Python is only installed after Railpack detects the root `requirements.txt`. If you see `No start command detected`, push the latest repo (includes `railway.toml`) or set **Start Command** to `cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT` in the Railway dashboard.
 
 ## Demo Scenarios
 
