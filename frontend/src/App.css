@@ -1791,6 +1791,11 @@
   border-left: 3px solid var(--wm-blue);
 }
 
+.chat-msg-agent .chat-msg-body {
+  background: #fff;
+  border-color: var(--border);
+}
+
 .chat-msg-error {
   border-color: rgba(222, 28, 36, 0.4);
   background: rgba(222, 28, 36, 0.05);
@@ -1852,7 +1857,7 @@
   padding: 0.75rem 1rem;
   border: 1px solid var(--border);
   border-left: 3px solid var(--wm-yellow);
-  background: var(--surface);
+  background: #fff;
 }
 
 .chat-thinking-header {
